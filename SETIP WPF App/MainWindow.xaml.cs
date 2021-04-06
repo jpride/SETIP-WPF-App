@@ -24,44 +24,17 @@ namespace SETIP_WPF_App
         string choice2String = "static 10.10.1.253 255.255.0.0";
         string choice3String = "static 192.168.1.253 255.255.255.0";
         //string choice4String = "static 169.254.10.253 255.255.0.0";
-        String defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
+
+        private static string dhcpChoiceLabel = "DHCP";
         
+        String defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
+
         public MainWindow()
         {
             InitializeComponent();
 
-            //grab list of all NetworkInterfaces
-            NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
 
-            //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
-            foreach (NetworkInterface nic in interfaces)
-            {
-                
-                if (nic.OperationalStatus == OperationalStatus.Up & nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                { 
-                    //check that the name contains ethernet
-                    if (nic.Name.Contains("Ethernet"))
-                    {
-                        //check that the name does not contain vEthernet, Loopback or Bluetooth
-                        if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
-                            
-                            {
-                                //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                                adapterName.Text = nic.Name;
-                                adapter = nic.Name;
-                                adapterCount++;
-
-                                foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                                {
-                                    if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                    {
-                                        adapterName.Text = String.Format("{0} ({1})", nic.Name, ip.Address.ToString());
-                                    }
-                                }
-                            }
-                    } 
-                }
-            }
+            UpdateAdapterInfo();
 
             if (adapterCount == 0)
             {
@@ -73,8 +46,6 @@ namespace SETIP_WPF_App
                 ErrorReport.Text = "No active adapters found...\nExiting in 10 seconds";
             }
         }
-
-        
         
         private static void NoAdapterTimeOut(object sender, EventArgs e)
         {
@@ -129,10 +100,13 @@ namespace SETIP_WPF_App
 
             //grab list of all NetworkInterfaces
             NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
+            IPGlobalProperties props = IPGlobalProperties.GetIPGlobalProperties();
 
             //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
             foreach (NetworkInterface nic in interfaces)
             {
+                IPInterfaceProperties adapterProps = nic.GetIPProperties();
+                IPv4InterfaceProperties prop = adapterProps.GetIPv4Properties();
 
                 if (nic.OperationalStatus == OperationalStatus.Up & nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
                 {
@@ -143,6 +117,11 @@ namespace SETIP_WPF_App
                             //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                             adapterName.Text = nic.Name;
                             adapter = nic.Name;
+
+                            if (prop.IsDhcpEnabled)
+                            {
+                                Choice1Btn.IsChecked = true;
+                            }
                             adapterCount++;
 
                             foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
@@ -175,8 +154,9 @@ namespace SETIP_WPF_App
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
                 ProcessRequest(p);
-                
+
                 //timer to account for delay in grabbing IPA afte DHCP is enabled
+                adapterName.Text = "working on it...";
                 resultTimer = new Timer();
                 resultTimer.Tick += ResultTimer_Tick;
                 resultTimer.Interval = 3000;

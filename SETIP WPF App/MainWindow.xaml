@@ -44,17 +44,21 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Label Grid.Row="5" Grid.Column="1" Content="Adapter: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto"/>
-            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" Text="Adapter Name" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" />
+            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" Text="Adapter Name" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" >
+                <TextBox.ContextMenu>
+                    <ContextMenu/>
+                </TextBox.ContextMenu>
+            </TextBox>
         </Grid>
         <Label Grid.Row="0"  Content="IP Setter - Select an option" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" />
-        <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#FF456565" Height="2" Width="380" Margin="0,0,0,0"/>
-            <StackPanel Grid.Row="1" Margin="40,30,10,0"  VerticalAlignment="Top">
+        <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#7F456565" Height="2" Width="380" Margin="0,0,0,0"/>
+            <StackPanel Grid.Row="1" Margin="40,20,10,0"  VerticalAlignment="Top">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type RadioButton}">
                     <Setter Property="Margin" Value="0,10,0,0"/>
                 </Style>
             </StackPanel.Resources>
-            <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP" FontFamily="Roboto" Click="Choice1Btn_Click" />
+            <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP"  FontFamily="Roboto" Click="Choice1Btn_Click" />
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice2Btn"  Content="10.10.1.253/16" FontFamily="Roboto" Click="Choice2Btn_Click"/>
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice3Btn"  Content="192.168.1.253/24" FontFamily="Roboto" Click="Choice3Btn_Click"/>
             <RadioButton Grid.Row="1" x:Name="Choice4Btn" >
