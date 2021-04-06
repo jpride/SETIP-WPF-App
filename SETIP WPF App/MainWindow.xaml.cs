@@ -20,7 +20,6 @@ namespace SETIP_WPF_App
         string adapter;
         int adapterCount = 0;
 
-
         readonly string dhcpChoiceContent = "DHCP";
         readonly string choice2Content = "10.10.1.253/16";
         readonly string choice3Content = "192.168.1.253/24";
@@ -29,15 +28,10 @@ namespace SETIP_WPF_App
         readonly string choice2Address = "10.10.1.253";
         readonly string choice3Address = "192.168.1.253";
 
-
         readonly string dhcpChoiceString = "dhcp";
         readonly string choice2String = "static 10.10.1.253 255.255.0.0";
         readonly string choice3String = "static 192.168.1.253 255.255.255.0";
-        //readonly string choice4String = "static 169.254.10.253 255.255.0.0";
-
-
-
-        
+                
 
         public MainWindow()
         {
@@ -47,6 +41,7 @@ namespace SETIP_WPF_App
             Choice1Btn.Content = dhcpChoiceContent;
             Choice2Btn.Content = choice2Content;
             Choice3Btn.Content = choice3Content;
+            userEntryTxt.Text = defaultChoice4String;
 
             //intialize adapter info
             UpdateAdapterInfo();
