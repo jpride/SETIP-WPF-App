@@ -59,7 +59,7 @@
                 </Style>
             </StackPanel.Resources>
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP"  FontFamily="Roboto" Click="Choice1Btn_Click" />
-            <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice2Btn"  Content="10.10.1.253/16" FontFamily="Roboto" Click="Choice2Btn_Click"/>
+            <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice2Btn"  Content="Choice2Content" FontFamily="Roboto" Click="Choice2Btn_Click"/>
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice3Btn"  Content="192.168.1.253/24" FontFamily="Roboto" Click="Choice3Btn_Click"/>
             <RadioButton Grid.Row="1" x:Name="Choice4Btn" >
                 <TextBox x:Name="userEntryTxt" Height="24" TextWrapping="Wrap" Text="Custom (x.x.x.x 255.255.x.x)" GotFocus="userEntryTxt_GotFocus" Width="214" FontFamily="Roboto" VerticalAlignment="Bottom" FontSize="16"/>

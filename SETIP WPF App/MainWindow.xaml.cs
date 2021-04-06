@@ -20,20 +20,35 @@ namespace SETIP_WPF_App
         string adapter;
         int adapterCount = 0;
 
-        string dhcpChoiceString = "dhcp";
-        string choice2String = "static 10.10.1.253 255.255.0.0";
-        string choice3String = "static 192.168.1.253 255.255.255.0";
-        //string choice4String = "static 169.254.10.253 255.255.0.0";
 
-        private static string dhcpChoiceLabel = "DHCP";
+        readonly string dhcpChoiceContent = "DHCP";
+        readonly string choice2Content = "10.10.1.253/16";
+        readonly string choice3Content = "192.168.1.253/24";
+        readonly string defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
+
+        readonly string choice2Address = "10.10.1.253";
+        readonly string choice3Address = "192.168.1.253";
+
+
+        readonly string dhcpChoiceString = "dhcp";
+        readonly string choice2String = "static 10.10.1.253 255.255.0.0";
+        readonly string choice3String = "static 192.168.1.253 255.255.255.0";
+        //readonly string choice4String = "static 169.254.10.253 255.255.0.0";
+
+
+
         
-        String defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
 
         public MainWindow()
         {
             InitializeComponent();
 
+            //Initialize button content
+            Choice1Btn.Content = dhcpChoiceContent;
+            Choice2Btn.Content = choice2Content;
+            Choice3Btn.Content = choice3Content;
 
+            //intialize adapter info
             UpdateAdapterInfo();
 
             if (adapterCount == 0)
@@ -122,6 +137,7 @@ namespace SETIP_WPF_App
                             {
                                 Choice1Btn.IsChecked = true;
                             }
+
                             adapterCount++;
 
                             foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
@@ -129,6 +145,15 @@ namespace SETIP_WPF_App
                                 if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                 {
                                     adapterName.Text = String.Format("{0} ({1})", nic.Name, ip.Address.ToString());
+
+                                    if (ip.Address.ToString() == choice2Address)
+                                    {
+                                        Choice2Btn.IsChecked = true;
+                                    }
+                                    else if (ip.Address.ToString() == choice3Address)
+                                    {
+                                        Choice3Btn.IsChecked = true;
+                                    }
                                 }
                             }
                         }
