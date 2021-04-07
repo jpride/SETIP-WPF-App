@@ -54,6 +54,8 @@ namespace SETIP_WPF_App
                 timer.Interval = 10000;
                 timer.Start();
                 ErrorReport.Text = "No active adapters found...\nExiting in 10 seconds";
+                adapterLabel.Content = "";
+
             }
         }
         

@@ -43,8 +43,8 @@
                 <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="5" Grid.Column="1" Content="Adapter: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto"/>
-            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" Text="Adapter Name" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" >
+            <Label Grid.Row="5" Grid.Column="1" x:Name="adapterLabel" Content="Adapter: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto"/>
+            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" >
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>
