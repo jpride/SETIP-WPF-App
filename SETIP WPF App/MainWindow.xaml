@@ -39,11 +39,11 @@
         </Grid>
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50" />
-                <ColumnDefinition Width="50" />
+                <ColumnDefinition Width="34" />
+                <ColumnDefinition Width="60" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="5" Grid.Column="1" x:Name="adapterLabel" Content="Adapter: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto"/>
+            <Label x:Name="adapterLabel" Content="Adapter Info: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1"/>
             <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" >
                 <TextBox.ContextMenu>
                     <ContextMenu/>
@@ -52,7 +52,7 @@
         </Grid>
         <Label Grid.Row="0"  Content="IP Setter - Select an option" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" />
         <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#7F456565" Height="2" Width="380" Margin="0,0,0,0"/>
-            <StackPanel Grid.Row="1" Margin="40,20,10,0"  VerticalAlignment="Top">
+        <StackPanel Grid.Row="1" Margin="40,20,10,0"  VerticalAlignment="Top">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type RadioButton}">
                     <Setter Property="Margin" Value="0,10,0,0"/>
@@ -62,10 +62,31 @@
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice2Btn"  Content="Choice2Content" FontFamily="Roboto" Click="Choice2Btn_Click"/>
             <RadioButton Grid.Row="1" FontSize="16" x:Name="Choice3Btn"  Content="Choice3Content" FontFamily="Roboto" Click="Choice3Btn_Click"/>
             <RadioButton Grid.Row="1" x:Name="Choice4Btn" >
-                <TextBox x:Name="userEntryTxt" Height="24" TextWrapping="Wrap" Text="custom entry" GotFocus="userEntryTxt_GotFocus" Width="214" FontFamily="Roboto" VerticalAlignment="Bottom" FontSize="16"/>
+                <TextBox x:Name="userEntryTxt"
+                         Height="24"
+                         TextWrapping="Wrap"
+                         Text="custom entry"
+                         GotFocus="userEntryTxt_GotFocus"
+                         Width="214"
+                         FontFamily="Roboto"
+                         VerticalAlignment="Bottom"
+                         FontSize="16"/>
             </RadioButton>
         </StackPanel>
-        <TextBox Grid.Row="7" x:Name="ErrorReport" Height="60" TextWrapping="Wrap" BorderBrush="#00ABADB3" Foreground="#FFFF2828" IsReadOnly="True" Background="Transparent"  FontWeight="Bold" FontFamily="Roboto"  TextAlignment="Center" BorderThickness="0">
+        <TextBox Grid.Row="7" 
+                 x:Name="ErrorReport"
+                 Height="60" 
+                 Width="372"
+                 TextWrapping="Wrap" 
+                 BorderBrush="#00ABADB3" 
+                 Foreground="#FFFF2828" 
+                 IsReadOnly="True" 
+                 Background="Transparent"  
+                 FontWeight="Bold" 
+                 FontFamily="Roboto" 
+                 BorderThickness="0" 
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto" >
             <TextBox.Effect>
                 <DropShadowEffect ShadowDepth="1"
                                   Direction="330"

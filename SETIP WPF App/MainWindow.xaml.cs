@@ -141,7 +141,8 @@ namespace SETIP_WPF_App
                             {
                                 if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                 {
-                                    adapterName.Text = String.Format("{0} ({1})", nic.Name, ip.Address.ToString());
+                                    adapterName.Text = String.Format("{0} || {1} ({2})", nic.Name,Dns.GetHostName(), ip.Address.ToString());
+                                    
 
                                     if (ip.Address.ToString() == choice2Address)
                                     {
@@ -215,6 +216,7 @@ namespace SETIP_WPF_App
                 
                 try
                 {
+                    
                     //split user input string into ipa and ipm
                     string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
 

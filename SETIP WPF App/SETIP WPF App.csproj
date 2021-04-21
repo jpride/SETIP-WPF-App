@@ -107,9 +107,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="ethernet_icon-icons.com_64699 %281%29.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="hnet.com-image.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
