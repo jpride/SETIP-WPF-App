@@ -212,33 +212,81 @@ namespace SETIP_WPF_App
 
                 //split character
                 string sep = @" ";
-
-                
-                try
-                {
-                    
-                    //split user input string into ipa and ipm
-                    string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
+                bool validIP;
+                bool validMask;
 
                  
-                    bool validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
-                    bool validMask = IPAddress.TryParse(customIP[1], out IPAddress mask);
-
-
-                    if (!validIP || !validMask)
+                try
+                {
+                    if (userEntryTxt.Text.Contains(" "))
                     {
-                        ErrorReport.Text = "Not a valid IP Addresss! Try Again";
+                        //split user input string into ipa and ipm
+                        string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
+
+
+                        validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
+                        validMask = IPAddress.TryParse(customIP[1], out IPAddress mask);
+
+
+                        if (!validIP || !validMask)
+                        {
+                            ErrorReport.Text = "Not a valid IP Addresss! Try Again";
+                        }
+                        else
+                        {
+                            Process p = new Process();
+                            p.StartInfo.FileName = "netsh.exe";
+                            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", adapter, ip, mask);
+                            p.StartInfo.UseShellExecute = false;
+                            p.StartInfo.CreateNoWindow = true;
+                            p.StartInfo.RedirectStandardOutput = true;
+                            ProcessRequest(p);
+                            UpdateAdapterInfo();
+                        }
                     }
-                    else
+                    else if (userEntryTxt.Text.Contains("/"))
                     {
-                        Process p = new Process();
-                        p.StartInfo.FileName = "netsh.exe";
-                        p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", adapter, ip, mask);
-                        p.StartInfo.UseShellExecute = false;
-                        p.StartInfo.CreateNoWindow = true;
-                        p.StartInfo.RedirectStandardOutput = true;
-                        ProcessRequest(p);
-                        UpdateAdapterInfo();
+                        sep = @"/";
+                        string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
+
+                        validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
+                        bool validMaskBits = int.TryParse(customIP[1], out int maskBits);
+
+                        if (validMaskBits)
+                        {
+                            string mask = null;
+
+                            switch (maskBits)
+                            {
+                                case 16:
+                                    mask = "255.255.0.0";
+                                    break;
+                                case 24:
+                                    mask = "255.255.255.0";
+                                    break;
+                                default:
+                                    mask = null;
+                                    break;
+                            }
+
+                            if (!string.IsNullOrEmpty(mask))
+                            {
+                                Process p = new Process();
+                                p.StartInfo.FileName = "netsh.exe";
+                                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", adapter, ip, mask);
+                                p.StartInfo.UseShellExecute = false;
+                                p.StartInfo.CreateNoWindow = true;
+                                p.StartInfo.RedirectStandardOutput = true;
+                                ProcessRequest(p);
+                                UpdateAdapterInfo();
+                            }
+                        }
+                        else 
+                        {
+                            ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'. Try Again";
+                        }
+
+                        
                     }
                 }
 
