@@ -86,7 +86,8 @@
                  FontFamily="Roboto" 
                  BorderThickness="0" 
                  VerticalScrollBarVisibility="Auto"
-                 HorizontalScrollBarVisibility="Auto" >
+                 HorizontalScrollBarVisibility="Auto"
+                 TextAlignment="Left">
             <TextBox.Effect>
                 <DropShadowEffect ShadowDepth="1"
                                   Direction="330"

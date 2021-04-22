@@ -266,6 +266,7 @@ namespace SETIP_WPF_App
                                     break;
                                 default:
                                     mask = null;
+                                    ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
                                     break;
                             }
 
@@ -281,12 +282,14 @@ namespace SETIP_WPF_App
                                 UpdateAdapterInfo();
                             }
                         }
-                        else 
+                        else
                         {
-                            ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'. Try Again";
+                            ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
                         }
-
-                        
+                    }
+                    else 
+                    {
+                        ErrorReport.Text = "Invalid Entry! Try Again";
                     }
                 }
 
