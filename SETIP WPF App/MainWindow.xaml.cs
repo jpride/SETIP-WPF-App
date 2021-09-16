@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Forms;
 
+
 namespace SETIP_WPF_App
 {
     /// <summary>
@@ -69,8 +70,11 @@ namespace SETIP_WPF_App
 
         private void ResultTimer_Tick(object sender, EventArgs e)
         {
+            ExitBtn.IsEnabled = true;
             UpdateAdapterInfo();
         }
+
+        
 
         private void ClearErrorReport(object sender, EventArgs e)
         {
@@ -100,7 +104,6 @@ namespace SETIP_WPF_App
             {
                 result = ex.Message;
             }
-
         }
 
         public void UpdateAdapterInfo()
@@ -167,9 +170,10 @@ namespace SETIP_WPF_App
 
         private void SetIPBtn_Click(object sender, RoutedEventArgs e)
         {
-          
+            
             if ((bool)Choice1Btn.IsChecked)
             {
+                ExitBtn.IsEnabled = false;
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
                 p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, dhcpChoiceString);
@@ -182,7 +186,7 @@ namespace SETIP_WPF_App
                 adapterName.Text = "working on it...";
                 resultTimer = new Timer();
                 resultTimer.Tick += ResultTimer_Tick;
-                resultTimer.Interval = 3000;
+                resultTimer.Interval = 2500;
                 resultTimer.Start();
             }
             else if ((bool)Choice2Btn.IsChecked)
@@ -303,6 +307,8 @@ namespace SETIP_WPF_App
                     ErrorReport.Text = "Invalid! Try Again";
                 }
             }
+
+            
         }
 
         private void userEntryTxt_GotFocus(object sender, RoutedEventArgs e)
