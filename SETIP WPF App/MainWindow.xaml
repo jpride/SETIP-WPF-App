@@ -22,8 +22,8 @@
             <RowDefinition Height="150" />
             <RowDefinition Height="10" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="24"/>
             <RowDefinition Height="10"/>
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -40,11 +40,11 @@
         <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="34" />
-                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="52" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label x:Name="adapterLabel" Content="Adapter Info: " FontSize="8" VerticalAlignment="Top" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1"/>
-            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,29.667,-2.333" >
+            <Label x:Name="adapterLabel" Content="Adapter: " VerticalAlignment="Top" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1" FontSize="10" FontWeight="Bold"/>
+            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" FontSize="11" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" >
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>
@@ -70,13 +70,14 @@
                          Width="214"
                          FontFamily="Roboto"
                          VerticalAlignment="Bottom"
-                         FontSize="16"/>
+                         FontSize="16" Background="#3FFFFFFF"/>
             </RadioButton>
         </StackPanel>
         <TextBox Grid.Row="7" 
                  x:Name="ErrorReport"
                  Height="60" 
                  Width="372"
+                 Margin="0,0,0,0"
                  TextWrapping="Wrap" 
                  BorderBrush="#00ABADB3" 
                  Foreground="#FFFF2828" 
@@ -87,7 +88,7 @@
                  BorderThickness="0" 
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
-                 TextAlignment="Left">
+                 TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBox.Effect>
                 <DropShadowEffect ShadowDepth="1"
                                   Direction="330"

@@ -14,58 +14,58 @@ namespace SETIP_WPF_App
     public partial class MainWindow : Window
     {
         string result;
-        private static System.Windows.Forms.Timer timer;
-        private static System.Windows.Forms.Timer resultTimer;
-        private static System.Windows.Forms.Timer errorReportTimer;
+        private static System.Windows.Forms.Timer _timer;
+        private static System.Windows.Forms.Timer _resultTimer;
+        private static System.Windows.Forms.Timer _errorReportTimer;
 
-        string adapter;
-        int adapterCount = 0;
+        private string _adapter;
+        private int _adapterCount = 0;
 
-        readonly string dhcpChoiceContent = "DHCP";
-        readonly string choice2Content = "10.10.1.253/16";
-        readonly string choice3Content = "192.168.1.253/24";
-        readonly string defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
+        readonly string _dhcpChoiceContent = "DHCP";
+        readonly string _choice2Content = "10.10.1.253/16";
+        readonly string _choice3Content = "192.168.1.253/24";
+        readonly string _defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
 
-        readonly string choice2Address = "10.10.1.253";
-        readonly string choice3Address = "192.168.1.253";
+        readonly string _choice2Address = "10.10.1.253";
+        readonly string _choice3Address = "192.168.1.253";
 
-        readonly string dhcpChoiceString = "dhcp";
-        readonly string choice2String = "static 10.10.1.253 255.255.0.0";
-        readonly string choice3String = "static 192.168.1.253 255.255.255.0";
-                
+        readonly string _dhcpChoiceString = "dhcp";
+        readonly string _choice2String = "static 10.10.1.253 255.255.0.0";
+        readonly string _choice3String = "static 192.168.1.253 255.255.255.0";
+
 
         public MainWindow()
         {
             InitializeComponent();
 
             //Initialize button content
-            Choice1Btn.Content = dhcpChoiceContent;
-            Choice2Btn.Content = choice2Content;
-            Choice3Btn.Content = choice3Content;
-            userEntryTxt.Text = defaultChoice4String;
+            Choice1Btn.Content = _dhcpChoiceContent;
+            Choice2Btn.Content = _choice2Content;
+            Choice3Btn.Content = _choice3Content;
+            userEntryTxt.Text = _defaultChoice4String;
 
             //intialize adapter info
             UpdateAdapterInfo();
 
-            if (adapterCount == 0)
-            {
-                //if no active wired adapters found, start a 10 second timer and place message in error box
-                timer = new Timer();
-                timer.Tick += new EventHandler(NoAdapterTimeOut);
-                timer.Interval = 10000;
-                timer.Start();
-                ErrorReport.Text = "No active adapters found...\nExiting in 10 seconds";
-                adapterLabel.Content = "";
-
-            }
         }
-        
-        private static void NoAdapterTimeOut(object sender, EventArgs e)
-        {
-            //upon expiration of timer, shut the app down
-            timer.Stop();
-            System.Windows.Application.Current.Shutdown();
 
+        private void AdapterSearchTimer()
+        {
+            //if no active wired adapters found, start a 5 second timer and place message in error box
+            //after 5 seconds, run UpdateAdapterInfo() again
+            _timer = new Timer();
+            _timer.Tick += new EventHandler(AdapterTimeOut);
+            _timer.Interval = 5000;
+            _timer.Start();
+            ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
+            adapterLabel.Content = "";
+        }
+
+        private void AdapterTimeOut(object sender, EventArgs e)
+        {
+            //upon expiration of timer, Rerun UpdateAdapterInfo()
+            _timer.Stop();
+            UpdateAdapterInfo();
         }
 
         private void ResultTimer_Tick(object sender, EventArgs e)
@@ -73,18 +73,13 @@ namespace SETIP_WPF_App
             ExitBtn.IsEnabled = true;
             UpdateAdapterInfo();
         }
-
-        
-
+      
         private void ClearErrorReport(object sender, EventArgs e)
         {
             ErrorReport.Text = "";
         }
 
-        /// <summary>
-        /// Method to process the IP change request
-        /// </summary>
-        /// <param name="p"></param>
+
         public void ProcessRequest(Process p)
         {
             try
@@ -95,10 +90,10 @@ namespace SETIP_WPF_App
                 Console.WriteLine(result);
                 ErrorReport.Text = result;
 
-                errorReportTimer = new Timer();
-                errorReportTimer.Tick += ClearErrorReport;
-                errorReportTimer.Interval = 6000;
-                errorReportTimer.Start();
+                _errorReportTimer = new Timer();
+                _errorReportTimer.Tick += ClearErrorReport;
+                _errorReportTimer.Interval = 6000;
+                _errorReportTimer.Start();
             }
             catch (Exception ex)
             {
@@ -112,6 +107,7 @@ namespace SETIP_WPF_App
             //This method reuses code from the MainWindow class above
             //This method is called after an ip address change is processed
 
+       
 
             //grab list of all NetworkInterfaces
             NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -131,27 +127,28 @@ namespace SETIP_WPF_App
                         {
                             //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                             adapterName.Text = nic.Name;
-                            adapter = nic.Name;
+                            _adapter = nic.Name;
 
                             if (prop.IsDhcpEnabled)
                             {
                                 Choice1Btn.IsChecked = true;
                             }
 
-                            adapterCount++;
+                            _adapterCount++;
 
                             foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
                             {
                                 if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                 {
-                                    adapterName.Text = String.Format("{0} || {1} ({2})", nic.Name,Dns.GetHostName(), ip.Address.ToString());
-                                    
+                                    adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name,Dns.GetHostName(), ip.Address.ToString());
+                                    ErrorReport.Text = String.Empty;
 
-                                    if (ip.Address.ToString() == choice2Address)
+
+                                    if (ip.Address.ToString() == _choice2Address)
                                     {
                                         Choice2Btn.IsChecked = true;
                                     }
-                                    else if (ip.Address.ToString() == choice3Address)
+                                    else if (ip.Address.ToString() == _choice3Address)
                                     {
                                         Choice3Btn.IsChecked = true;
                                     }
@@ -161,7 +158,21 @@ namespace SETIP_WPF_App
                     }
                 }
             }
+
+            if (_adapterCount == 0)
+            {
+                //if no active wired adapters found, start a 5 second timer and place message in error box
+                //after 5 seconds, run UpdateAdapterInfo() again
+                _timer = new Timer();
+                _timer.Tick += new EventHandler(AdapterTimeOut);
+                _timer.Interval = 5000;
+                _timer.Start();
+                ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
+                adapterLabel.Content = "";
+            }
+            
         }
+
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -173,27 +184,27 @@ namespace SETIP_WPF_App
             
             if ((bool)Choice1Btn.IsChecked)
             {
-                ExitBtn.IsEnabled = false;
+                ExitBtn.IsEnabled = false; //resolved in resultTimer.Tick eventhandler
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, dhcpChoiceString);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _dhcpChoiceString);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
                 ProcessRequest(p);
 
                 //timer to account for delay in grabbing IPA afte DHCP is enabled
-                adapterName.Text = "working on it...";
-                resultTimer = new Timer();
-                resultTimer.Tick += ResultTimer_Tick;
-                resultTimer.Interval = 2500;
-                resultTimer.Start();
+                adapterName.Text = "waiting for DHCP...";
+                _resultTimer = new Timer();
+                _resultTimer.Tick += ResultTimer_Tick;
+                _resultTimer.Interval = 2500;
+                _resultTimer.Start();
             }
             else if ((bool)Choice2Btn.IsChecked)
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, choice2String);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice2String);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -204,7 +215,7 @@ namespace SETIP_WPF_App
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, choice3String);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice3String);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -240,7 +251,7 @@ namespace SETIP_WPF_App
                         {
                             Process p = new Process();
                             p.StartInfo.FileName = "netsh.exe";
-                            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", adapter, ip, mask);
+                            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask);
                             p.StartInfo.UseShellExecute = false;
                             p.StartInfo.CreateNoWindow = true;
                             p.StartInfo.RedirectStandardOutput = true;
@@ -278,7 +289,7 @@ namespace SETIP_WPF_App
                             {
                                 Process p = new Process();
                                 p.StartInfo.FileName = "netsh.exe";
-                                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", adapter, ip, mask);
+                                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask);
                                 p.StartInfo.UseShellExecute = false;
                                 p.StartInfo.CreateNoWindow = true;
                                 p.StartInfo.RedirectStandardOutput = true;
@@ -300,7 +311,7 @@ namespace SETIP_WPF_App
                 catch (IndexOutOfRangeException)
                 {
                     ErrorReport.Text = "You must enter an IPAddress followed by a single space, then a Subnet Mask";
-                    userEntryTxt.Text = defaultChoice4String;
+                    userEntryTxt.Text = _defaultChoice4String;
                 }
                 catch (Exception)
                 {
@@ -318,17 +329,17 @@ namespace SETIP_WPF_App
 
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice4String;
         }
 
         private void Choice2Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice4String;
         }
 
         private void Choice3Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice4String;
         }
     }
 }
