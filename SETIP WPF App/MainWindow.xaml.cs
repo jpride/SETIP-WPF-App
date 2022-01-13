@@ -24,14 +24,17 @@ namespace SETIP_WPF_App
         readonly string _dhcpChoiceContent = "DHCP";
         readonly string _choice2Content = "10.10.1.253/16";
         readonly string _choice3Content = "192.168.1.253/24";
-        readonly string _defaultChoice4String = "Custom (x.x.x.x 255.255.x.x)";
+        readonly string _choice4Content = "169.254.1.253/16";
+        readonly string _defaultChoice5Content = "Custom (x.x.x.x 255.255.x.x)";
 
         readonly string _choice2Address = "10.10.1.253";
         readonly string _choice3Address = "192.168.1.253";
+        readonly string _choice4Address = "169.254.1.253";
 
-        readonly string _dhcpChoiceString = "dhcp";
-        readonly string _choice2String = "static 10.10.1.253 255.255.0.0";
-        readonly string _choice3String = "static 192.168.1.253 255.255.255.0";
+        readonly string _dhcpNetShChoiceString = "dhcp";
+        readonly string _choice2NetShString = "static 10.10.1.253 255.255.0.0";
+        readonly string _choice3NetShString = "static 192.168.1.253 255.255.255.0";
+        readonly string _choice4NetShString = "static 169.254.1.253 255.255.0.0";
 
 
         public MainWindow()
@@ -42,7 +45,8 @@ namespace SETIP_WPF_App
             Choice1Btn.Content = _dhcpChoiceContent;
             Choice2Btn.Content = _choice2Content;
             Choice3Btn.Content = _choice3Content;
-            userEntryTxt.Text = _defaultChoice4String;
+            Choice4Btn.Content = _choice4Content;
+            userEntryTxt.Text = _defaultChoice5Content;
 
             //intialize adapter info
             UpdateAdapterInfo();
@@ -152,6 +156,10 @@ namespace SETIP_WPF_App
                                     {
                                         Choice3Btn.IsChecked = true;
                                     }
+                                    else if (ip.Address.ToString() == _choice4Address)
+                                    {
+                                        Choice4Btn.IsChecked = true;
+                                    }
                                 }
                             }
                         }
@@ -187,7 +195,7 @@ namespace SETIP_WPF_App
                 ExitBtn.IsEnabled = false; //resolved in resultTimer.Tick eventhandler
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _dhcpChoiceString);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _dhcpNetShChoiceString);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -204,7 +212,7 @@ namespace SETIP_WPF_App
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice2String);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice2NetShString);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -215,7 +223,7 @@ namespace SETIP_WPF_App
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice3String);
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice3NetShString);
                 p.StartInfo.UseShellExecute = false;
                 p.StartInfo.CreateNoWindow = true;
                 p.StartInfo.RedirectStandardOutput = true;
@@ -223,6 +231,17 @@ namespace SETIP_WPF_App
                 UpdateAdapterInfo();
             }
             else if ((bool)Choice4Btn.IsChecked)
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "netsh.exe";
+                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice4NetShString);
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                ProcessRequest(p);
+                UpdateAdapterInfo();
+            }
+            else if ((bool)Choice5Btn.IsChecked)
             {
 
                 //split character
@@ -311,7 +330,7 @@ namespace SETIP_WPF_App
                 catch (IndexOutOfRangeException)
                 {
                     ErrorReport.Text = "You must enter an IPAddress followed by a single space, then a Subnet Mask";
-                    userEntryTxt.Text = _defaultChoice4String;
+                    userEntryTxt.Text = _defaultChoice5Content;
                 }
                 catch (Exception)
                 {
@@ -329,17 +348,22 @@ namespace SETIP_WPF_App
 
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice5Content;
         }
 
         private void Choice2Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice5Content;
         }
 
         private void Choice3Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice4String;
+            userEntryTxt.Text = _defaultChoice5Content;
+        }
+
+        private void Choice4Btn_Click(object sender, RoutedEventArgs e)
+        {
+            userEntryTxt.Text = _defaultChoice5Content;
         }
     }
 }
