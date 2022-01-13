@@ -185,7 +185,17 @@ namespace SETIP_WPF_App
             
         }
 
+        public Process CreateProcess(string adapter, string NetShString)
+        {
+            var p = new Process();
+            p.StartInfo.FileName = "netsh.exe";
+            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, NetShString);
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.RedirectStandardOutput = true;
 
+            return p;
+        }
 
         //*******************   Button events   ***************************//
 
@@ -200,14 +210,10 @@ namespace SETIP_WPF_App
             if ((bool)Choice1Btn.IsChecked)
             {
                 ExitBtn.IsEnabled = false; //resolved in resultTimer.Tick eventhandler
-                Process p = new Process();
-                p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _dhcpNetShChoiceString);
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                ProcessRequest(p);
 
+                var p = CreateProcess(_adapter, _dhcpNetShChoiceString);
+                ProcessRequest(p);
+                
                 //timer to account for delay in grabbing IPA afte DHCP is enabled
                 adapterName.Text = "waiting for DHCP...";
                 _dhcpTimer = new Timer();
@@ -215,39 +221,28 @@ namespace SETIP_WPF_App
                 _dhcpTimer.Interval = 2500;
                 _dhcpTimer.Start();
             }
+
             else if ((bool)Choice2Btn.IsChecked)
             {
-                Process p = new Process();
-                p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice2NetShString);
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
+                var p = CreateProcess(_adapter, _choice2NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
+
             else if ((bool)Choice3Btn.IsChecked)
             {
-                Process p = new Process();
-                p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice3NetShString);
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
+                var p = CreateProcess(_adapter, _choice3NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
+
             else if ((bool)Choice4Btn.IsChecked)
             {
-                Process p = new Process();
-                p.StartInfo.FileName = "netsh.exe";
-                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", _adapter, _choice4NetShString);
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
+                var p = CreateProcess(_adapter, _choice4NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
+
             else if ((bool)Choice5Btn.IsChecked)
             {
 
