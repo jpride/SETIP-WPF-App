@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SETIP_WPF_App"
         mc:Ignorable="d"
-        Title="IP Setter" Height="400" Width="400">
+        Title="IP Setter" Height="320" Width="400">
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="#FF10A2F7" Offset="0"/>
@@ -78,7 +78,7 @@
                  x:Name="ErrorReport"
                  Height="60" 
                  Width="372"
-                 Margin="4,4.667,4,7.333"
+                 Margin="8,105.667,0,-93.667"
                  TextWrapping="Wrap" 
                  BorderBrush="#00ABADB3" 
                  Foreground="#FFFF2828" 

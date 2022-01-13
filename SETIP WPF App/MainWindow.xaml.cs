@@ -13,9 +13,9 @@ namespace SETIP_WPF_App
     /// </summary>
     public partial class MainWindow : Window
     {
-        string result;
+        private string _result;
         private static System.Windows.Forms.Timer _timer;
-        private static System.Windows.Forms.Timer _resultTimer;
+        private static System.Windows.Forms.Timer _dhcpTimer;
         private static System.Windows.Forms.Timer _errorReportTimer;
 
         private string _adapter;
@@ -61,19 +61,22 @@ namespace SETIP_WPF_App
             _timer.Tick += new EventHandler(AdapterTimeOut);
             _timer.Interval = 5000;
             _timer.Start();
-            ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
+            //ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
+            adapterName.Text = "No active adapters found...\nWaiting for active adapter";
             adapterLabel.Content = "";
         }
 
         private void AdapterTimeOut(object sender, EventArgs e)
         {
             //upon expiration of timer, Rerun UpdateAdapterInfo()
+            ErrorReport.Text = "AdapterTimeout";
             _timer.Stop();
             UpdateAdapterInfo();
         }
 
         private void ResultTimer_Tick(object sender, EventArgs e)
         {
+            
             ExitBtn.IsEnabled = true;
             UpdateAdapterInfo();
         }
@@ -83,17 +86,14 @@ namespace SETIP_WPF_App
             ErrorReport.Text = "";
         }
 
-
         public void ProcessRequest(Process p)
         {
             try
             {
                 p.Start();
                 p.WaitForExit(30000);
-                result = p.StandardOutput.ReadToEnd();
-                Console.WriteLine(result);
-                ErrorReport.Text = result;
-
+                _result = p.StandardOutput.ReadToEnd();
+                Console.WriteLine(_result);
                 _errorReportTimer = new Timer();
                 _errorReportTimer.Tick += ClearErrorReport;
                 _errorReportTimer.Interval = 6000;
@@ -101,7 +101,8 @@ namespace SETIP_WPF_App
             }
             catch (Exception ex)
             {
-                result = ex.Message;
+                System.Windows.MessageBox.Show(ex.Message, "IP Setter");
+                _result = ex.Message;
             }
         }
 
@@ -136,6 +137,8 @@ namespace SETIP_WPF_App
                             if (prop.IsDhcpEnabled)
                             {
                                 Choice1Btn.IsChecked = true;
+                                if (_dhcpTimer != null)
+                                    _dhcpTimer.Stop();
                             }
 
                             _adapterCount++;
@@ -175,12 +178,16 @@ namespace SETIP_WPF_App
                 _timer.Tick += new EventHandler(AdapterTimeOut);
                 _timer.Interval = 5000;
                 _timer.Start();
-                ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
+                adapterName.Text = "No active adapters found...\nWaiting for active adapter";
+                //ErrorReport.Text = "No active adapters found...\nWaiting for active adapter";
                 adapterLabel.Content = "";
             }
             
         }
 
+
+
+        //*******************   Button events   ***************************//
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -203,10 +210,10 @@ namespace SETIP_WPF_App
 
                 //timer to account for delay in grabbing IPA afte DHCP is enabled
                 adapterName.Text = "waiting for DHCP...";
-                _resultTimer = new Timer();
-                _resultTimer.Tick += ResultTimer_Tick;
-                _resultTimer.Interval = 2500;
-                _resultTimer.Start();
+                _dhcpTimer = new Timer();
+                _dhcpTimer.Tick += ResultTimer_Tick;
+                _dhcpTimer.Interval = 2500;
+                _dhcpTimer.Start();
             }
             else if ((bool)Choice2Btn.IsChecked)
             {
@@ -264,7 +271,8 @@ namespace SETIP_WPF_App
 
                         if (!validIP || !validMask)
                         {
-                            ErrorReport.Text = "Not a valid IP Addresss! Try Again";
+                            System.Windows.MessageBox.Show("Not a valid IP Addresss! Try Again", "IP Setter");
+                            //ErrorReport.Text = "Not a valid IP Addresss! Try Again";
                         }
                         else
                         {
@@ -300,7 +308,8 @@ namespace SETIP_WPF_App
                                     break;
                                 default:
                                     mask = null;
-                                    ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
+                                    System.Windows.MessageBox.Show("Invalid Maskbits! This app only supports '/16' or '/24'", "IP Setter");
+                                    //ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
                                     break;
                             }
 
@@ -318,23 +327,27 @@ namespace SETIP_WPF_App
                         }
                         else
                         {
-                            ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
+                            System.Windows.MessageBox.Show("Invalid Maskbits! This app only supports '/16' or '/24'", "IP Setter");
+                            //ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
                         }
                     }
                     else 
                     {
-                        ErrorReport.Text = "Invalid Entry! Try Again";
+                        System.Windows.MessageBox.Show("Invalid Entry! Try Again", "IP Setter");
+                        //ErrorReport.Text = "Invalid Entry! Try Again";
                     }
                 }
 
                 catch (IndexOutOfRangeException)
                 {
-                    ErrorReport.Text = "You must enter an IPAddress followed by a single space, then a Subnet Mask";
+                    System.Windows.MessageBox.Show("You must enter an IPAddress followed by a single space, then a Subnet Mask", "IP Setter");
+                    //ErrorReport.Text = "You must enter an IPAddress followed by a single space, then a Subnet Mask";
                     userEntryTxt.Text = _defaultChoice5Content;
                 }
                 catch (Exception)
                 {
-                    ErrorReport.Text = "Invalid! Try Again";
+                    System.Windows.MessageBox.Show("Invalid! Try Again", "IP Setter");
+                    //ErrorReport.Text = "Invalid! Try Again";
                 }
             }
 
