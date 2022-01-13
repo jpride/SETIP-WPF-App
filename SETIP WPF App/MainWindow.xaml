@@ -5,12 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SETIP_WPF_App"
         mc:Ignorable="d"
-        Title="IP Setter" Height="320" Width="400">
+        Title="IP Address Configurator" Height="264.6" Width="400">
     <Window.Background>
-        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#FF10A2F7" Offset="0"/>
-            <GradientStop Color="White" Offset="1"/>
-        </LinearGradientBrush>
+        <ImageBrush ImageSource="pruple bg gradient.png"/>
     </Window.Background>
 
     <Grid Margin="10,5,10,0">
@@ -25,7 +22,8 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="19.167" />
+            <RowDefinition Height="52.833"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -34,10 +32,10 @@
                 <ColumnDefinition Width="140"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="3" Grid.Column="1" x:Name="SetIPBtn"  Content="SET" Width="120" Height="44" FontFamily="Roboto" Click="SetIPBtn_Click" />
-            <Button Grid.Row="3" Grid.Column="2" x:Name="ExitBtn" Content="EXIT" Width="120" Height="44" FontFamily="Roboto"  Click="ExitBtn_Click"/>
+            <Button Grid.Column="1" x:Name="SetIPBtn"  Content="SET" Width="120" Height="44" FontFamily="Roboto" Click="SetIPBtn_Click" Margin="3,116,17,-110" />
+            <Button Grid.Column="2" x:Name="ExitBtn" Content="EXIT" Width="120" Height="44" FontFamily="Roboto"  Click="ExitBtn_Click" Margin="16,126,4,-120"/>
         </Grid>
-        <Grid Grid.Row="4" Margin="0,0.333,0,5.667" Grid.RowSpan="2">
+        <Grid Grid.Row="3" Margin="1,2,-0.333,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="34" />
                 <ColumnDefinition Width="52" />
@@ -50,9 +48,16 @@
                 </TextBox.ContextMenu>
             </TextBox>
         </Grid>
-        <Label Grid.Row="0"  Content="IP Setter - Select an option" FontFamily="Roboto" FontSize="18" HorizontalAlignment="Center" />
-        <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="#7F456565" Height="2" Width="380" Margin="0,0,0,0"/>
-        <StackPanel Grid.Row="1" Margin="40,20,10,0"  VerticalAlignment="Top">
+        <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Center" Margin="88,0" />
+        <Separator Grid.Row="0" VerticalAlignment="Bottom" Height="2" Width="380" Margin="0,0,0,0">
+            <Separator.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC1BCC4" Offset="0"/>
+                    <GradientStop Color="#FF5E4C6B" Offset="0"/>
+                </LinearGradientBrush>
+            </Separator.Background>
+        </Separator>
+        <StackPanel Grid.Row="1" Margin="40,20,10,0"  VerticalAlignment="Top" Grid.RowSpan="2">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type RadioButton}">
                     <Setter Property="Margin" Value="0,10,0,0"/>
@@ -68,17 +73,18 @@
                          TextWrapping="Wrap"
                          Text="custom entry"
                          GotFocus="userEntryTxt_GotFocus"
+                         KeyDown="OnKeyDownHandler"
                          Width="214"
                          FontFamily="Roboto"
                          VerticalAlignment="Bottom"
                          FontSize="16" Background="#3FFFFFFF"/>
             </RadioButton>
         </StackPanel>
-        <TextBox Grid.Row="7" 
+        <TextBox Grid.Row="8" 
                  x:Name="ErrorReport"
                  Height="60" 
                  Width="372"
-                 Margin="8,105.667,0,-93.667"
+                 Margin="8,86.5,0,-93.667"
                  TextWrapping="Wrap" 
                  BorderBrush="#00ABADB3" 
                  Foreground="#FFFF2828" 
@@ -99,5 +105,6 @@
             </TextBox.Effect>
 
         </TextBox>
+        <Image HorizontalAlignment="Left" Height="100" Margin="258,26,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5"/>
     </Grid>
 </Window>

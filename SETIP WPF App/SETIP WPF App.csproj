@@ -109,5 +109,14 @@
   <ItemGroup>
     <Resource Include="hnet.com-image.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SigiloftheGwateway.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="purple bg gradient.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="pruple bg gradient.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

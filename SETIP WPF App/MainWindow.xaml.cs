@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Forms;
-
+using System.Windows.Input;
 
 namespace SETIP_WPF_App
 {
@@ -13,6 +13,8 @@ namespace SETIP_WPF_App
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly bool _autoSetOnBtnClick = true;
+
         private string _result;
         private static System.Windows.Forms.Timer _timer;
         private static System.Windows.Forms.Timer _dhcpTimer;
@@ -91,17 +93,16 @@ namespace SETIP_WPF_App
             try
             {
                 p.Start();
-                p.WaitForExit(30000);
+                p.WaitForExit(10000);
                 _result = p.StandardOutput.ReadToEnd();
-                Console.WriteLine(_result);
                 _errorReportTimer = new Timer();
                 _errorReportTimer.Tick += ClearErrorReport;
                 _errorReportTimer.Interval = 6000;
                 _errorReportTimer.Start();
-            }
+            }            
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "IP Setter");
+                System.Windows.MessageBox.Show("Error Processing Request:\n" + ex.Message, "IP Setter");
                 _result = ex.Message;
             }
         }
@@ -210,6 +211,7 @@ namespace SETIP_WPF_App
             if ((bool)Choice1Btn.IsChecked)
             {
                 ExitBtn.IsEnabled = false; //resolved in resultTimer.Tick eventhandler
+
 
                 var p = CreateProcess(_adapter, _dhcpNetShChoiceString);
                 ProcessRequest(p);
@@ -357,21 +359,169 @@ namespace SETIP_WPF_App
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = _defaultChoice5Content;
+
+            if ((bool)Choice1Btn.IsChecked & _autoSetOnBtnClick)
+            {
+                ExitBtn.IsEnabled = false; //resolved in resultTimer.Tick eventhandler
+
+
+                var p = CreateProcess(_adapter, _dhcpNetShChoiceString);
+                ProcessRequest(p);
+
+                //timer to account for delay in grabbing IPA afte DHCP is enabled
+                adapterName.Text = "waiting for DHCP...";
+                _dhcpTimer = new Timer();
+                _dhcpTimer.Tick += ResultTimer_Tick;
+                _dhcpTimer.Interval = 2500;
+                _dhcpTimer.Start();
+            }
         }
 
         private void Choice2Btn_Click(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = _defaultChoice5Content;
+
+            if ((bool)Choice2Btn.IsChecked & _autoSetOnBtnClick)
+            {
+                var p = CreateProcess(_adapter, _choice2NetShString);
+                ProcessRequest(p);
+                UpdateAdapterInfo();
+            }
+
         }
 
         private void Choice3Btn_Click(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = _defaultChoice5Content;
+
+            if ((bool)Choice3Btn.IsChecked & _autoSetOnBtnClick)
+            {
+                var p = CreateProcess(_adapter, _choice3NetShString);
+                ProcessRequest(p);
+                UpdateAdapterInfo();
+            }
         }
 
         private void Choice4Btn_Click(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = _defaultChoice5Content;
+
+            if ((bool)Choice4Btn.IsChecked & _autoSetOnBtnClick)
+            {
+                var p = CreateProcess(_adapter, _choice4NetShString);
+                ProcessRequest(p);
+                UpdateAdapterInfo();
+            }
+        }
+
+        private void OnKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+
+                if ((bool)Choice5Btn.IsChecked & _autoSetOnBtnClick)
+                {
+
+                    //split character
+                    string sep = @" ";
+                    bool validIP;
+                    bool validMask;
+
+
+                    try
+                    {
+                        if (userEntryTxt.Text.Contains(" "))
+                        {
+                            //split user input string into ipa and ipm
+                            string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
+
+
+                            validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
+                            validMask = IPAddress.TryParse(customIP[1], out IPAddress mask);
+
+
+                            if (!validIP || !validMask)
+                            {
+                                System.Windows.MessageBox.Show("Not a valid IP Addresss! Try Again", "IP Setter");
+                                //ErrorReport.Text = "Not a valid IP Addresss! Try Again";
+                            }
+                            else
+                            {
+                                Process p = new Process();
+                                p.StartInfo.FileName = "netsh.exe";
+                                p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask);
+                                p.StartInfo.UseShellExecute = false;
+                                p.StartInfo.CreateNoWindow = true;
+                                p.StartInfo.RedirectStandardOutput = true;
+                                ProcessRequest(p);
+                                UpdateAdapterInfo();
+                            }
+                        }
+                        else if (userEntryTxt.Text.Contains("/"))
+                        {
+                            sep = @"/";
+                            string[] customIP = userEntryTxt.Text.Split(sep.ToCharArray());
+
+                            validIP = IPAddress.TryParse(customIP[0], out IPAddress ip);
+                            bool validMaskBits = int.TryParse(customIP[1], out int maskBits);
+
+                            if (validMaskBits)
+                            {
+                                string mask = null;
+
+                                switch (maskBits)
+                                {
+                                    case 16:
+                                        mask = "255.255.0.0";
+                                        break;
+                                    case 24:
+                                        mask = "255.255.255.0";
+                                        break;
+                                    default:
+                                        mask = null;
+                                        System.Windows.MessageBox.Show("Invalid Maskbits! This app only supports '/16' or '/24'", "IP Setter");
+                                        //ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
+                                        break;
+                                }
+
+                                if (!string.IsNullOrEmpty(mask))
+                                {
+                                    Process p = new Process();
+                                    p.StartInfo.FileName = "netsh.exe";
+                                    p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" static {1} {2}", _adapter, ip, mask);
+                                    p.StartInfo.UseShellExecute = false;
+                                    p.StartInfo.CreateNoWindow = true;
+                                    p.StartInfo.RedirectStandardOutput = true;
+                                    ProcessRequest(p);
+                                    UpdateAdapterInfo();
+                                }
+                            }
+                            else
+                            {
+                                System.Windows.MessageBox.Show("Invalid Maskbits! This app only supports '/16' or '/24'", "IP Setter");
+                                //ErrorReport.Text = "Invalid Maskbits! This app only supports '/16' or '/24'";
+                            }
+                        }
+                        else
+                        {
+                            System.Windows.MessageBox.Show("Invalid Entry! Try Again", "IP Setter");
+                            //ErrorReport.Text = "Invalid Entry! Try Again";
+                        }
+                    }
+
+                    catch (IndexOutOfRangeException)
+                    {
+                        System.Windows.MessageBox.Show("You must enter an IPAddress followed by a single space, then a Subnet Mask", "IP Setter");
+                        //ErrorReport.Text = "You must enter an IPAddress followed by a single space, then a Subnet Mask";
+                        userEntryTxt.Text = _defaultChoice5Content;
+                    }
+                    catch (Exception)
+                    {
+                        System.Windows.MessageBox.Show("Invalid! Try Again", "IP Setter");
+                        //ErrorReport.Text = "Invalid! Try Again";
+                    }
+                }
+            }
         }
     }
 }
