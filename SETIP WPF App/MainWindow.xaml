@@ -19,11 +19,6 @@
             <RowDefinition Height="160" />
             <RowDefinition Height="10" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="19.167" />
-            <RowDefinition Height="52.833"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -32,8 +27,6 @@
                 <ColumnDefinition Width="140"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" x:Name="SetIPBtn"  Content="SET" Width="120" Height="44" FontFamily="Roboto" Click="SetIPBtn_Click" Margin="3,116,17,-110" />
-            <Button Grid.Column="2" x:Name="ExitBtn" Content="EXIT" Width="120" Height="44" FontFamily="Roboto"  Click="ExitBtn_Click" Margin="16,126,4,-120"/>
         </Grid>
         <Grid Grid.Row="3" Margin="1,2,-0.333,24">
             <Grid.ColumnDefinitions>
@@ -80,31 +73,6 @@
                          FontSize="16" Background="#3FFFFFFF"/>
             </RadioButton>
         </StackPanel>
-        <TextBox Grid.Row="8" 
-                 x:Name="ErrorReport"
-                 Height="60" 
-                 Width="372"
-                 Margin="8,86.5,0,-93.667"
-                 TextWrapping="Wrap" 
-                 BorderBrush="#00ABADB3" 
-                 Foreground="#FFFF2828" 
-                 IsReadOnly="True" 
-                 Background="Transparent"  
-                 FontWeight="Bold" 
-                 FontFamily="Roboto" 
-                 BorderThickness="0" 
-                 VerticalScrollBarVisibility="Auto"
-                 HorizontalScrollBarVisibility="Auto"
-                 TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBox.Effect>
-                <DropShadowEffect ShadowDepth="1"
-                                  Direction="330"
-                                  Color="Black"
-                                  Opacity="0.5"
-                                  BlurRadius="4" />
-            </TextBox.Effect>
-
-        </TextBox>
         <Image HorizontalAlignment="Left" Height="100" Margin="258,26,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5"/>
     </Grid>
 </Window>
