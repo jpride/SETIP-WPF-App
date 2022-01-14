@@ -75,4 +75,5 @@
         </StackPanel>
         <Image HorizontalAlignment="Left" Height="100" Margin="258,26,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5"/>
     </Grid>
+
 </Window>
