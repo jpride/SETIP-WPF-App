@@ -248,6 +248,7 @@ namespace SETIP_WPF_App
 
         private void OnKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
         {
+
             if (e.Key == Key.Escape)
             {
                 System.Windows.Application.Current.Shutdown();
