@@ -36,9 +36,9 @@ namespace SETIP_WPF_App
         readonly string _choice4Address = "169.254.1.253";
 
         readonly string _dhcpNetShChoiceString = "dhcp";
-        readonly string _choice2NetShString = "static 10.10.1.253 255.255.0.0";
-        readonly string _choice3NetShString = "static 192.168.1.253 255.255.255.0";
-        readonly string _choice4NetShString = "static 169.254.1.253 255.255.0.0";
+        readonly string _choice2NetShString = "static 10.10.1.253 255.255.0.0 10.10.1.1";
+        readonly string _choice3NetShString = "static 192.168.1.253 255.255.255.0 192.168.1.1";
+        readonly string _choice4NetShString = "static 169.254.1.253 255.255.0.0 169.254.1.1";
 
 
         public MainWindow()
@@ -164,11 +164,11 @@ namespace SETIP_WPF_App
             
         }
 
-        public Process CreateProcess(string adapter, string NetShString)
+        public Process CreateProcess(string adapter, string ipMaskString)
         {
             var p = new Process();
             p.StartInfo.FileName = "netsh.exe";
-            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, NetShString);
+            p.StartInfo.Arguments = String.Format("interface ipv4 set address name=\"{0}\" {1}", adapter, ipMaskString);
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.RedirectStandardOutput = true;
