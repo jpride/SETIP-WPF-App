@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Threading;
 
 
 
@@ -15,10 +16,11 @@ namespace SETIP_WPF_App
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _result;
+
         private static System.Windows.Forms.Timer _timer;
         private static System.Windows.Forms.Timer _dhcpTimer;
 
+        private NetworkInterface _nic;
         private string _adapter;
         private int _adapterCount = 0;
 
@@ -45,10 +47,11 @@ namespace SETIP_WPF_App
         {
             InitializeComponent();
 
+            //Event handler attached to the Window (looking for Escape Key)
             this.PreviewKeyDown += new System.Windows.Input.KeyEventHandler(OnKeyDownInMainWindowHandler);
+
+            //Event handler watching for Network Address Change, triggers the UpdateAdapterInfo() method
             NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
-
-
 
             //Initialize button content
             Choice1Btn.Content = _dhcpChoiceContent;
@@ -60,13 +63,28 @@ namespace SETIP_WPF_App
 
             //intialize adapter info
             UpdateAdapterInfo();
-            
         }
 
-        //This eventhandler is causing threading issues if UpdateAdapterInfo() is called. May need thread management
+        //work in progress
         private void AddressChangedCallback(object sender, EventArgs e)
         {
-            Console.WriteLine("Address Change Detected");
+            Console.WriteLine("AddressChangedDetected");
+            if (_nic.OperationalStatus == OperationalStatus.Up)
+            {
+                Console.WriteLine("_nic: {0}", _nic.Name);
+                try
+                {
+                    UpdateAdapterInfo();
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error in Callback: {0}", ex.Message);
+                }
+            }
+            else
+            {
+                adapterName.Text = "waiting for active adapter...";
+            }
         }
 
         private void AdapterTimeOut(object sender, EventArgs e)
@@ -80,34 +98,27 @@ namespace SETIP_WPF_App
         {
             UpdateAdapterInfo();
         }
-      
+
         public void ProcessRequest(Process p)
         {
             try
             {
-                p.Start();
-                p.WaitForExit(10000);
-                _result = p.StandardOutput.ReadToEnd();
+                _ = p.Start();
+                _ = p.WaitForExit(10000);
+                var _result = p.StandardOutput.ReadToEnd();
             }            
             catch (Exception ex)
             {
                 ShowMessage(_messageBoxIsShown, "Error Processing Request:\n" + ex.Message);
-                _result = ex.Message;
+                var _result = ex.Message;
             }
         }
 
         public void UpdateAdapterInfo()
         {
-            //This is not as elegant as i would like, but it works.
-            //This method reuses code from the MainWindow class above
-            //This method is called after an ip address change is processed
-
-
-           
-
             //grab list of all NetworkInterfaces
             NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-            IPGlobalProperties props = IPGlobalProperties.GetIPGlobalProperties();
+            var props = IPGlobalProperties.GetIPGlobalProperties();
 
             //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
             foreach (NetworkInterface nic in interfaces)
@@ -122,16 +133,26 @@ namespace SETIP_WPF_App
                         if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
                         {
                             //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                            //adapterName.Text = nic.Name;
+                            _nic = nic;
                             _adapter = nic.Name;
+                            
+
+                            this.Dispatcher.Invoke(() =>
+                                {
+                                    adapterName.Text = _adapter;
+                                });
 
                             if (prop.IsDhcpEnabled)
                             {
-                                Choice1Btn.IsChecked = true;
-                                    
+                                this.Dispatcher.Invoke(() =>
+                                {
+                                    Choice1Btn.IsChecked = true;
+                                });
+
                                 if (_dhcpTimer != null)
+                                {
                                     _dhcpTimer.Stop();
-                                    
+                                }   
                             }
 
                             _adapterCount++;
@@ -140,19 +161,31 @@ namespace SETIP_WPF_App
                             {
                                 if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                 {
-                                    adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name, Dns.GetHostName(), ip.Address.ToString());
+                                    this.Dispatcher.Invoke(() =>
+                                    {
+                                        adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name, Dns.GetHostName(), ip.Address.ToString());
+                                    });
 
                                     if (ip.Address.ToString() == _choice2Address)
                                     {
-                                        Choice2Btn.IsChecked = true;
+                                        this.Dispatcher.Invoke(() =>
+                                        {
+                                            Choice2Btn.IsChecked = true;
+                                        });
                                     }
                                     else if (ip.Address.ToString() == _choice3Address)
                                     {
-                                        Choice3Btn.IsChecked = true;
+                                        this.Dispatcher.Invoke(() =>
+                                        {
+                                            Choice3Btn.IsChecked = true;
+                                        });
                                     }
                                     else if (ip.Address.ToString() == _choice4Address)
                                     {
-                                        Choice4Btn.IsChecked = true;
+                                        this.Dispatcher.Invoke(() =>
+                                        {
+                                            Choice4Btn.IsChecked = true;
+                                        });
                                     }
                                 }
                             }
@@ -165,14 +198,14 @@ namespace SETIP_WPF_App
             {
                 //if no active wired adapters found, start a 5 second timer and place message in error box
                 //after 5 seconds, run UpdateAdapterInfo() again
-                _timer = new Timer();
+                _timer = new System.Windows.Forms.Timer();
                 _timer.Tick += new EventHandler(AdapterTimeOut);
                 _timer.Interval = 5000;
                 _timer.Start();
                 adapterName.Text = "No active adapters found...Waiting for active adapter";
                 ShowMessage(_messageBoxIsShown, "No active adapters found...Waiting for active adapter");
             }
-            
+
             
         }
 
@@ -193,13 +226,12 @@ namespace SETIP_WPF_App
             if (!messageBoxShown)
             {
                 _messageBoxIsShown = true;
-                System.Windows.MessageBox.Show(msg, _appTitle);
+                _ = System.Windows.MessageBox.Show(msg, _appTitle);
             }
         }
 
-        //*******************   Button events   ***************************//
 
-
+        //*******************   UI events   ***************************//
         private void userEntryTxt_GotFocus(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = "";
@@ -211,15 +243,15 @@ namespace SETIP_WPF_App
 
             if ((bool)Choice1Btn.IsChecked)
             {
-                var p = CreateProcess(_adapter, _dhcpNetShChoiceString);
+                Process p = CreateProcess(_adapter, _dhcpNetShChoiceString);
                 ProcessRequest(p);
 
                 //timer to account for delay in grabbing IPA afte DHCP is enabled
                 adapterName.Text = "waiting for DHCP...";
-                _dhcpTimer = new Timer();
-                _dhcpTimer.Tick += ResultTimer_Tick;
-                _dhcpTimer.Interval = 3000;
-                _dhcpTimer.Start();
+                //_dhcpTimer = new System.Windows.Forms.Timer();
+                //_dhcpTimer.Tick += ResultTimer_Tick;
+                //_dhcpTimer.Interval = 3000;
+                //_dhcpTimer.Start();
             }
         }
 
@@ -229,7 +261,7 @@ namespace SETIP_WPF_App
 
             if ((bool)Choice2Btn.IsChecked)
             {
-                var p = CreateProcess(_adapter, _choice2NetShString);
+                Process p = CreateProcess(_adapter, _choice2NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
@@ -242,7 +274,7 @@ namespace SETIP_WPF_App
 
             if ((bool)Choice3Btn.IsChecked)
             {
-                var p = CreateProcess(_adapter, _choice3NetShString);
+                Process p = CreateProcess(_adapter, _choice3NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
@@ -254,7 +286,7 @@ namespace SETIP_WPF_App
 
             if ((bool)Choice4Btn.IsChecked)
             {
-                var p = CreateProcess(_adapter, _choice4NetShString);
+                Process p = CreateProcess(_adapter, _choice4NetShString);
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
