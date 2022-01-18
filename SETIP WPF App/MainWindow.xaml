@@ -66,7 +66,7 @@
                          TextWrapping="Wrap"
                          Text="custom entry"
                          GotFocus="userEntryTxt_GotFocus"
-                         KeyDown="OnKeyDownHandler"
+                         KeyDown="OnKeyDownInUserEntryBoxHandler"
                          Width="214"
                          FontFamily="Roboto"
                          VerticalAlignment="Bottom"

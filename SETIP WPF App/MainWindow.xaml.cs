@@ -45,6 +45,8 @@ namespace SETIP_WPF_App
         {
             InitializeComponent();
 
+            this.PreviewKeyDown += new System.Windows.Input.KeyEventHandler(OnKeyDownInMainWindowHandler);
+
             //Initialize button content
             Choice1Btn.Content = _dhcpChoiceContent;
             Choice2Btn.Content = _choice2Content;
@@ -246,13 +248,8 @@ namespace SETIP_WPF_App
             }
         }
 
-        private void OnKeyDownHandler(object sender, System.Windows.Input.KeyEventArgs e)
+        private void OnKeyDownInUserEntryBoxHandler(object sender, System.Windows.Input.KeyEventArgs e)
         {
-
-            if (e.Key == Key.Escape)
-            {
-                System.Windows.Application.Current.Shutdown();
-            }
 
             if (e.Key == Key.Enter)
             {
@@ -354,6 +351,15 @@ namespace SETIP_WPF_App
                     }
                 }
             }
+        }
+
+        private void OnKeyDownInMainWindowHandler(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                System.Windows.Application.Current.Shutdown();
+            }
+
         }
     }
 }
