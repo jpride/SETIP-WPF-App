@@ -36,9 +36,9 @@ namespace SETIP_WPF_App
         readonly string _choice4Address = "169.254.1.253";
 
         readonly string _dhcpNetShChoiceString = "dhcp";
-        readonly string _choice2NetShString = "static 10.10.1.253 255.255.0.0 10.10.1.1";
-        readonly string _choice3NetShString = "static 192.168.1.253 255.255.255.0 192.168.1.1";
-        readonly string _choice4NetShString = "static 169.254.1.253 255.255.0.0 169.254.1.1";
+        readonly string _choice2NetShString = "static address=10.10.1.253 mask=255.255.0.0 gateway=10.10.1.1";
+        readonly string _choice3NetShString = "static address=192.168.1.253 mask=255.255.255.0 gateway=192.168.1.1";
+        readonly string _choice4NetShString = "static address=169.254.1.253 mask=255.255.0.0 gateway=169.254.1.1";
 
 
         public MainWindow()
@@ -46,6 +46,9 @@ namespace SETIP_WPF_App
             InitializeComponent();
 
             this.PreviewKeyDown += new System.Windows.Input.KeyEventHandler(OnKeyDownInMainWindowHandler);
+            NetworkChange.NetworkAddressChanged += new NetworkAddressChangedEventHandler(AddressChangedCallback);
+
+
 
             //Initialize button content
             Choice1Btn.Content = _dhcpChoiceContent;
@@ -57,9 +60,14 @@ namespace SETIP_WPF_App
 
             //intialize adapter info
             UpdateAdapterInfo();
-
+            
         }
 
+        //This eventhandler is causing threading issues if UpdateAdapterInfo() is called. May need thread management
+        private void AddressChangedCallback(object sender, EventArgs e)
+        {
+            Console.WriteLine("Address Change Detected");
+        }
 
         private void AdapterTimeOut(object sender, EventArgs e)
         {
@@ -94,7 +102,8 @@ namespace SETIP_WPF_App
             //This method reuses code from the MainWindow class above
             //This method is called after an ip address change is processed
 
-       
+
+           
 
             //grab list of all NetworkInterfaces
             NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
@@ -113,14 +122,16 @@ namespace SETIP_WPF_App
                         if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
                         {
                             //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                            adapterName.Text = nic.Name;
+                            //adapterName.Text = nic.Name;
                             _adapter = nic.Name;
 
                             if (prop.IsDhcpEnabled)
                             {
                                 Choice1Btn.IsChecked = true;
+                                    
                                 if (_dhcpTimer != null)
                                     _dhcpTimer.Stop();
+                                    
                             }
 
                             _adapterCount++;
@@ -129,7 +140,7 @@ namespace SETIP_WPF_App
                             {
                                 if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                 {
-                                    adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name,Dns.GetHostName(), ip.Address.ToString());
+                                    adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name, Dns.GetHostName(), ip.Address.ToString());
 
                                     if (ip.Address.ToString() == _choice2Address)
                                     {
@@ -161,6 +172,7 @@ namespace SETIP_WPF_App
                 adapterName.Text = "No active adapters found...Waiting for active adapter";
                 ShowMessage(_messageBoxIsShown, "No active adapters found...Waiting for active adapter");
             }
+            
             
         }
 
@@ -206,7 +218,7 @@ namespace SETIP_WPF_App
                 adapterName.Text = "waiting for DHCP...";
                 _dhcpTimer = new Timer();
                 _dhcpTimer.Tick += ResultTimer_Tick;
-                _dhcpTimer.Interval = 5000;
+                _dhcpTimer.Interval = 3000;
                 _dhcpTimer.Start();
             }
         }
