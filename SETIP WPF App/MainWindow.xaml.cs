@@ -6,6 +6,7 @@ using System.Net;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Threading;
+using System.Linq;
 
 
 
@@ -18,7 +19,6 @@ namespace SETIP_WPF_App
     {
 
         private static System.Windows.Forms.Timer _timer;
-        private static System.Windows.Forms.Timer _dhcpTimer;
 
         private NetworkInterface _nic;
         private string _adapter;
@@ -68,15 +68,37 @@ namespace SETIP_WPF_App
         //work in progress
         private void AddressChangedCallback(object sender, EventArgs e)
         {
-            Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
-
-            try
+            //Refresh apapters and find the one that matches _adapter from UpdateAdapterInfo()
+            NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface n in adapters)
             {
-                UpdateAdapterInfo();
+                if (n.Name == _adapter)
+                {
+                    _nic = n;
+                }
             }
-            catch (Exception ex)
+
+            Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
+            Console.WriteLine("Adapter {0} is {1}", _nic.Name, _nic.OperationalStatus);
+
+            //Run UpdateAdapterInfo() is the adapter is Up, if not, place message in label that reports it down
+            if (_nic.OperationalStatus == OperationalStatus.Up)
             {
-                Console.Write("Error in Callback: {0}", ex.Message);
+
+                try
+                {
+                    UpdateAdapterInfo();
+                }
+                catch (Exception ex)
+                {
+                    Console.Write("Error in Callback: {0}", ex.Message);
+                }
+            }
+            else {
+                this.Dispatcher.Invoke(() =>
+                {
+                    adapterName.Text = _adapter + " is down...";
+                });
             }
         }
 
@@ -141,10 +163,6 @@ namespace SETIP_WPF_App
                                     Choice1Btn.IsChecked = true;
                                 });
 
-                                if (_dhcpTimer != null)
-                                {
-                                    _dhcpTimer.Stop();
-                                }   
                             }
 
                             _adapterCount++;
@@ -238,12 +256,8 @@ namespace SETIP_WPF_App
                 Process p = CreateProcess(_adapter, _dhcpNetShChoiceString);
                 ProcessRequest(p);
 
-                //timer to account for delay in grabbing IPA afte DHCP is enabled
                 adapterName.Text = "waiting for DHCP...";
-                //_dhcpTimer = new System.Windows.Forms.Timer();
-                //_dhcpTimer.Tick += ResultTimer_Tick;
-                //_dhcpTimer.Interval = 3000;
-                //_dhcpTimer.Start();
+
             }
         }
 
