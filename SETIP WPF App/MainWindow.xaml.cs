@@ -68,22 +68,15 @@ namespace SETIP_WPF_App
         //work in progress
         private void AddressChangedCallback(object sender, EventArgs e)
         {
-            Console.WriteLine("AddressChangedDetected");
-            if (_nic.OperationalStatus == OperationalStatus.Up)
+            Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
+
+            try
             {
-                Console.WriteLine("_nic: {0}", _nic.Name);
-                try
-                {
-                    UpdateAdapterInfo();
-                }
-                catch (Exception ex)
-                {
-                    Console.Write("Error in Callback: {0}", ex.Message);
-                }
+                UpdateAdapterInfo();
             }
-            else
+            catch (Exception ex)
             {
-                adapterName.Text = "waiting for active adapter...";
+                Console.Write("Error in Callback: {0}", ex.Message);
             }
         }
 
@@ -118,7 +111,6 @@ namespace SETIP_WPF_App
         {
             //grab list of all NetworkInterfaces
             NetworkInterface[] interfaces = NetworkInterface.GetAllNetworkInterfaces();
-            var props = IPGlobalProperties.GetIPGlobalProperties();
 
             //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
             foreach (NetworkInterface nic in interfaces)
