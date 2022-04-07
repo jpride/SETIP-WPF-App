@@ -3,11 +3,7 @@ using System.Windows;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Net;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Threading;
-using System.Linq;
-
 
 
 namespace SETIP_WPF_App
@@ -72,10 +68,7 @@ namespace SETIP_WPF_App
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface n in adapters)
             {
-                if (n.Name == _adapter)
-                {
-                    _nic = n;
-                }
+                _nic = (n.Name == _adapter) ? n : null; 
             }
 
             Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
