@@ -68,7 +68,11 @@ namespace SETIP_WPF_App
             NetworkInterface[] adapters = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface n in adapters)
             {
-                _nic = (n.Name == _adapter) ? n : null; 
+                if (n.Name == _adapter)
+                { 
+                    _nic = n;
+                    break;
+                }
             }
 
             Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
