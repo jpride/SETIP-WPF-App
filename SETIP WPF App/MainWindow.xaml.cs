@@ -147,7 +147,7 @@ namespace SETIP_WPF_App
                             _nic = nic;
                             _adapter = nic.Name;
                             
-
+                            //'this' is the Main Window Class and Dispatcher handles updating the UI
                             this.Dispatcher.Invoke(() =>
                                 {
                                     adapterName.Text = _adapter;
@@ -170,7 +170,9 @@ namespace SETIP_WPF_App
                                 {
                                     this.Dispatcher.Invoke(() =>
                                     {
-                                        adapterName.Text = String.Format("\"{0}\" || {1} [{2}]", nic.Name, Dns.GetHostName(), ip.Address.ToString());
+                                        adapterName.Text = nic.Name;
+                                        hostName.Text = Dns.GetHostName();
+                                        ipAddress.Text = ip.Address.ToString() + "/" + ip.PrefixLength.ToString();
                                     });
 
                                     if (ip.Address.ToString() == _choice2Address)

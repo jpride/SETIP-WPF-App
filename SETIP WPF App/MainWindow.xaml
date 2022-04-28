@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SETIP_WPF_App"
         mc:Ignorable="d"
-        Title="IP Address Configurator" Height="264.6" Width="400">
+        Title="IP Address Configurator"
+        Height="320"
+        Width="400">
     <Window.Background>
         <ImageBrush ImageSource="pruple bg gradient.png"/>
     </Window.Background>
@@ -18,35 +20,16 @@
             <RowDefinition Height="30" />
             <RowDefinition Height="160" />
             <RowDefinition Height="10" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="100" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30"/>
-                <ColumnDefinition Width="140"/>
-                <ColumnDefinition Width="140"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-        </Grid>
-        <Grid Grid.Row="3" Margin="1,2,-0.333,24">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="34" />
-                <ColumnDefinition Width="52" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <Label x:Name="adapterLabel" Content="Adapter: " VerticalAlignment="Top" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1" FontSize="10" FontWeight="Bold"/>
-            <TextBox Grid.Row="5" Grid.Column="2" x:Name="adapterName" FontSize="11" BorderThickness="0" Background="Transparent" IsReadOnly="True"  OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" >
-                <TextBox.ContextMenu>
-                    <ContextMenu/>
-                </TextBox.ContextMenu>
-            </TextBox>
-        </Grid>
+  
+        
         <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Center" Margin="88,0" />
         <Separator Grid.Row="0" VerticalAlignment="Bottom" Height="2" Width="380" Margin="0,0,0,0">
             <Separator.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFC1BCC4" Offset="0"/>
-                    <GradientStop Color="#FF5E4C6B" Offset="0"/>
+                    <GradientStop Color="#FF2E3741" Offset="0"/>
                 </LinearGradientBrush>
             </Separator.Background>
         </Separator>
@@ -73,7 +56,45 @@
                          FontSize="16" Background="#3FFFFFFF"/>
             </RadioButton>
         </StackPanel>
-        <Image HorizontalAlignment="Left" Height="100" Margin="258,26,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5"/>
+        <Image HorizontalAlignment="Center" Height="80" Margin="258,26,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5"/>
+        
+        <Grid Grid.Row="3" Margin="1,2,-0.333,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="59" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="152" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            
+            <Border BorderBrush="#7F000000" BorderThickness="0,0,0,1" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2"/>
+            <Border BorderBrush="#7F000000" BorderThickness="0,0,0,1" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
+
+            <Label x:Name="adapterLabel" Content="Adapter: " VerticalAlignment="Top" HorizontalAlignment="Right" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1" Grid.Row="0" FontSize="9" FontWeight="Bold" Foreground="#D8000000" />
+            <Label x:Name="hostNameLabel" Content="HostName:  " VerticalAlignment="Top" HorizontalAlignment="Right" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1" Grid.Row="1" FontSize="9" FontWeight="Bold" Foreground="#D8000000" />
+            <Label x:Name="ipaLabel" Content="IP Address:  " VerticalAlignment="Top" HorizontalAlignment="Right" FontFamily="Roboto" Margin="0.333,0" Grid.Column="1" Grid.Row="2" FontSize="9" FontWeight="Bold" Foreground="#D8000000" />
+
+            <TextBox Grid.Row="0" Grid.Column="2" x:Name="adapterName" FontSize="11" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                <TextBox.ContextMenu>
+                    <ContextMenu/>
+                </TextBox.ContextMenu>
+            </TextBox>
+            <TextBox Grid.Row="1" Grid.Column="2" x:Name="hostName" FontSize="11" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch" >
+                <TextBox.ContextMenu>
+                    <ContextMenu/>
+                </TextBox.ContextMenu>
+            </TextBox>
+            <TextBox Grid.Row="2" Grid.Column="2" x:Name="ipAddress" FontSize="11" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch" >
+                <TextBox.ContextMenu>
+                    <ContextMenu/>
+                </TextBox.ContextMenu>
+            </TextBox>
+
+        </Grid>
     </Grid>
 
 </Window>
