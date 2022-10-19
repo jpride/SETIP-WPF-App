@@ -11,7 +11,7 @@ namespace SETIP_WPF_App
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Application : Window
     {
 
         private static System.Windows.Forms.Timer _timer;
@@ -27,7 +27,7 @@ namespace SETIP_WPF_App
         readonly string _choice2Content = "10.10.1.253/16";
         readonly string _choice3Content = "192.168.1.253/24";
         readonly string _choice4Content = "169.254.1.253/16";
-        readonly string _defaultChoice5Content = "Custom (x.x.x.x 255.255.x.x)";
+        readonly string _defaultChoice5Content = "Enter ip/maskbits";
 
         readonly string _choice2Address = "10.10.1.253";
         readonly string _choice3Address = "192.168.1.253";
@@ -39,7 +39,7 @@ namespace SETIP_WPF_App
         readonly string _choice4NetShString = "static address=169.254.1.253 mask=255.255.0.0 gateway=169.254.1.1";
 
 
-        public MainWindow()
+        public Application()
         {
             InitializeComponent();
 
@@ -78,7 +78,7 @@ namespace SETIP_WPF_App
             Console.WriteLine("Address Changed Detected on adapter: {0}", _nic.Name);
             Console.WriteLine("Adapter {0} is {1}", _nic.Name, _nic.OperationalStatus);
 
-            //Run UpdateAdapterInfo() is the adapter is Up, if not, place message in label that reports it down
+            //Run UpdateAdapterInfo() if the adapter is Up, if not, place message in label that reports it down
             if (_nic.OperationalStatus == OperationalStatus.Up)
             {
 
@@ -246,6 +246,12 @@ namespace SETIP_WPF_App
             userEntryTxt.Text = "";
         }
 
+        private void Choice5Btn_Click(object sender, RoutedEventArgs e)
+        {
+            //userEntryTxt.Text = "";
+            //commented out because the user experience was not ideal. Text would clear out if user selected the button after entering  desired address
+        }
+
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = _defaultChoice5Content;
@@ -299,13 +305,12 @@ namespace SETIP_WPF_App
 
         private void OnKeyDownInUserEntryBoxHandler(object sender, System.Windows.Input.KeyEventArgs e)
         {
-
             if (e.Key == Key.Enter)
             {
 
                 if ((bool)Choice5Btn.IsChecked)
                 {
-
+                    
                     //split character
                     string sep = @" ";
                     bool validIP;
@@ -354,6 +359,9 @@ namespace SETIP_WPF_App
 
                                 switch (maskBits)
                                 {
+                                    case 8:
+                                        mask = "255.0.0.0";
+                                        break;
                                     case 16:
                                         mask = "255.255.0.0";
                                         break;
