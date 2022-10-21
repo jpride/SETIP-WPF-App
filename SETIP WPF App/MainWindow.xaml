@@ -7,19 +7,19 @@
         mc:Ignorable="d"
         Title="IP Address Configurator"
         Height="330"
-        Width="450">
+        Width="440">
     <Window.Background>
-        <ImageBrush ImageSource="pruple bg gradient.png"/>
+        <ImageBrush/>
     </Window.Background>
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" Name="LeftMargin"/>
                 <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="170" Name="MainBody"/>
-
+                <ColumnDefinition Width="160" Name="MainBody"/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="38.069"/>
+                <ColumnDefinition Width="81.931"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -36,16 +36,23 @@
                 <RowDefinition Height="30" Name="IpaddressRow"/>
 
             </Grid.RowDefinitions>
-            <Image HorizontalAlignment="Left" Height="80"  Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Width="100" Source="SigiloftheGwateway.png" Opacity="0.5" Grid.RowSpan="3" />
-            <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Left" Margin="133,0,0,0" Grid.ColumnSpan="5" />
-            <Separator Grid.Row="0" VerticalAlignment="Bottom" Height="2" Width="380" Margin="45,0,45,0" Grid.ColumnSpan="6">
+            <Image HorizontalAlignment="Left" Height="80"  Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Width="100" Source="SigiloftheGwateway.png" Opacity="0.25" Grid.RowSpan="3" Grid.ColumnSpan="2" />
+            
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Background="Black" />
+            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Background="#FF444444" />
+            <Border Grid.Row="2" Panel.ZIndex="-1" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" Background="#FFEBEBEB" />
+            <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="1" Background="#FF444444" />
+            <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="3" Background="#FF95BCE5" />
+
+            <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.ColumnSpan="7" Grid.Column="0" Background="Black" Foreground="White" />
+            <!--<Separator Grid.Row="0" VerticalAlignment="Bottom" Height="2" Width="450" Margin="0,0,0,0" Grid.ColumnSpan="6" Grid.Column="0">
                 <Separator.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FFC1BCC4" Offset="0"/>
                         <GradientStop Color="#FF2E3741" Offset="0"/>
                     </LinearGradientBrush>
                 </Separator.Background>
-            </Separator>
+            </Separator>-->
             <RadioButton Grid.Row="2" Grid.Column="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP"  FontFamily="Roboto" Click="Choice1Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
             <RadioButton Grid.Row="3" Grid.Column="1" FontSize="16" x:Name="Choice2Btn"  Content="Choice2Content" FontFamily="Roboto" Click="Choice2Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
             <RadioButton Grid.Row="4" Grid.Column="1" FontSize="16" x:Name="Choice3Btn"  Content="Choice3Content" FontFamily="Roboto" Click="Choice3Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
@@ -65,21 +72,21 @@
             </RadioButton>
             <Button Grid.Column="3" Content="Apply" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="Center" Height="24" Width="48" Click="ApplyUserEntryBtn_Click"/>
 
-            <Label x:Name="adapterLabel" Content="Adapter:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Roboto"  Grid.Column="1" Grid.Row="8" FontSize="12" FontWeight="Bold" Foreground="#D8000000" />
-            <Label x:Name="hostNameLabel" Content="HostName:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Roboto"  Grid.Column="1" Grid.Row="9" FontSize="12" FontWeight="Bold" Foreground="#D8000000" />
-            <Label x:Name="ipaLabel" Content="IP Address:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Roboto" Grid.Column="1" Grid.Row="10" FontSize="12" FontWeight="Bold" Foreground="#D8000000" />
+            <Label x:Name="adapterLabel" Content="Adapter:" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Roboto"  Grid.Column="1" Grid.Row="8" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="23,0,0,0" />
+            <Label x:Name="hostNameLabel" Content="HostName:" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Roboto"  Grid.Column="1" Grid.Row="9" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="7,0,0,0" />
+            <Label x:Name="ipaLabel" Content="IP Address:" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Roboto" Grid.Column="1" Grid.Row="10" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="6,0,0,0" />
 
-            <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="14">
+            <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,4,20,0" VerticalAlignment="Top" FontSize="14">
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>
             </TextBox>
-            <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="hostName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch" FontSize="14" >
+            <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="hostName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,4,20,0" VerticalAlignment="Top" FontSize="14" >
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>
             </TextBox>
-            <TextBox Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="ipAddress" FontSize="14" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,0,20,4" VerticalAlignment="Center" HorizontalAlignment="Stretch" >
+            <TextBox Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="ipAddress" FontSize="14" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" FontFamily="Roboto" Margin="0,4,20,0" VerticalAlignment="Top" >
                 <TextBox.ContextMenu>
                     <ContextMenu/>
                 </TextBox.ContextMenu>

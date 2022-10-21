@@ -119,5 +119,8 @@
   <ItemGroup>
     <Resource Include="pruple bg gradient.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Blue Border bg.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
