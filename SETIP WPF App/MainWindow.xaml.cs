@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Input;
-
+using System.Drawing;
 
 namespace SETIP_WPF_App
 {
@@ -24,10 +24,10 @@ namespace SETIP_WPF_App
         public bool _messageBoxIsShown = false; //tracks state of message box, in order to stop them from stacking indefinetely
 
         readonly string _dhcpChoiceContent = "DHCP";
-        readonly string _choice2Content = "10.10.1.253/16";
-        readonly string _choice3Content = "192.168.1.253/24";
-        readonly string _choice4Content = "169.254.1.253/16";
-        readonly string _defaultChoice5Content = "Enter ip/maskbits";
+        readonly string _choice2Content = "10.10.1.253 / 16";
+        readonly string _choice3Content = "192.168.1.253 / 24";
+        readonly string _choice4Content = "169.254.1.253 / 16";
+        readonly string _defaultChoice5Content = "Enter ip / maskbits";
 
         readonly string _choice2Address = "10.10.1.253";
         readonly string _choice3Address = "192.168.1.253";
@@ -245,6 +245,7 @@ namespace SETIP_WPF_App
         private void userEntryTxt_GotFocus(object sender, RoutedEventArgs e)
         {
             userEntryTxt.Text = "";
+            userEntryTxt.Foreground = System.Windows.Media.Brushes.Black;
         }
 
         private void Choice5Btn_Click(object sender, RoutedEventArgs e)
@@ -255,7 +256,7 @@ namespace SETIP_WPF_App
 
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice5Content;
+            ResetUserEntryText();
 
             if ((bool)Choice1Btn.IsChecked)
             {
@@ -269,7 +270,7 @@ namespace SETIP_WPF_App
 
         private void Choice2Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice5Content;
+            ResetUserEntryText();
 
             if ((bool)Choice2Btn.IsChecked)
             {
@@ -282,7 +283,7 @@ namespace SETIP_WPF_App
 
         private void Choice3Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice5Content;
+            ResetUserEntryText();
 
             if ((bool)Choice3Btn.IsChecked)
             {
@@ -294,7 +295,7 @@ namespace SETIP_WPF_App
 
         private void Choice4Btn_Click(object sender, RoutedEventArgs e)
         {
-            userEntryTxt.Text = _defaultChoice5Content;
+            ResetUserEntryText();
 
             if ((bool)Choice4Btn.IsChecked)
             {
@@ -522,6 +523,12 @@ namespace SETIP_WPF_App
                 System.Windows.Application.Current.Shutdown();
             }
 
+        }
+
+        private void ResetUserEntryText()
+        {
+            userEntryTxt.Text = _defaultChoice5Content;
+            userEntryTxt.Foreground = System.Windows.Media.Brushes.Tan;
         }
 
        
