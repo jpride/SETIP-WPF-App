@@ -7,61 +7,60 @@
         mc:Ignorable="d"
         Title="IP Address Configurator"
         Height="330"
-        Width="440">
+        Width="440" VerticalAlignment="Top" Top="200" Left="200" ResizeMode="NoResize">
     <Window.Background>
         <ImageBrush/>
     </Window.Background>
-    <Grid Margin="0,0,0,-27">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20" x:Name="LeftMargin"/>
-                <ColumnDefinition Width="80" />
-                <ColumnDefinition Width="160" Name="MainBody"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="38.069"/>
-                <ColumnDefinition Width="81.931"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30" Name="HeaderRow"/>
-                <RowDefinition Height="10" Name="HeaderBreak"/>
-                <RowDefinition Height="30" Name="Choice1Row"/>
-                <RowDefinition Height="30" Name="Choice2Row"/>
-                <RowDefinition Height="30" Name="Choice3Row"/>
-                <RowDefinition Height="30" Name="Choice4Row"/>
-                <RowDefinition Height="30" Name="Choice5Row"/>
-                <RowDefinition Height="10" Name="BodyBreak"/>
-                <RowDefinition Height="30" Name="AdapterRow"/>
-                <RowDefinition Height="30" Name="HostnameRow"/>
-                <RowDefinition Height="30" Name="IpaddressRow"/>
-            </Grid.RowDefinitions>
-            <!-- Fancy Image -->
-            <Image HorizontalAlignment="Left" Height="80"  Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Width="100" Source="SigiloftheGwateway.png" Opacity="0.25" Grid.RowSpan="3" Grid.ColumnSpan="2" />
-            
-            <!-- Main Body Borders -->
-            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Background="Black" />
-            <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Background="#FF444444" />
-            <Border Grid.Row="2" Panel.ZIndex="-1" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" Background="#FFEBEBEB" />
-            <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="1" Background="#FF444444" />
-            
-            <!-- Ethernet Info Label Borders -->
-            <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="3" Background="#FF95BCE5" />
-            <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
-            <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
-            <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
-            <!-- Ethernet Info Borders-->
-            <Border Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1" />
-            <Border Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
-            <Border Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" Name="HeaderRow"/>
+            <RowDefinition Height="10" Name="HeaderBreak"/>
+            <RowDefinition Height="30" Name="Choice1Row"/>
+            <RowDefinition Height="30" Name="Choice2Row"/>
+            <RowDefinition Height="30" Name="Choice3Row"/>
+            <RowDefinition Height="30" Name="Choice4Row"/>
+            <RowDefinition Height="30" Name="Choice5Row"/>
+            <RowDefinition Height="10" Name="BodyBreak"/>
+            <RowDefinition Height="30" Name="AdapterRow"/>
+            <RowDefinition Height="30" Name="HostnameRow"/>
+            <RowDefinition Height="30" Name="IpaddressRow"/>
+        </Grid.RowDefinitions>
+        <!-- Fancy Image -->
+        <Image HorizontalAlignment="Left" Height="80"  Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Width="100" Source="SigiloftheGwateway.png" Opacity="0.25" Grid.RowSpan="3" Grid.ColumnSpan="2" />
 
-            <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.ColumnSpan="7" Grid.Column="0" Background="Black" Foreground="White" />
+        <!-- Main Body Borders -->
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" Background="Black" />
+        <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="7" Background="#FF444444" />
+        <Border Grid.Row="2" Panel.ZIndex="-1" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="5" Background="#FFEBEBEB" />
+        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="1" Background="#FF444444" />
 
-            <RadioButton Grid.Row="2" Grid.Column="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP"  FontFamily="Bahnschrift Bold" Click="Choice1Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-            <RadioButton Grid.Row="3" Grid.Column="1" FontSize="16" x:Name="Choice2Btn"  Content="Choice2Content" FontFamily="Bahnschrift Bold" Click="Choice2Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-            <RadioButton Grid.Row="4" Grid.Column="1" FontSize="16" x:Name="Choice3Btn"  Content="Choice3Content" FontFamily="Bahnschrift Bold" Click="Choice3Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-            <RadioButton Grid.Row="5" Grid.Column="1" FontSize="16" x:Name="Choice4Btn"  Content="Choice4Content" FontFamily="Bahnschrift Bold" Click="Choice4Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
-            <RadioButton Grid.Row="6" Grid.Column="1" x:Name="Choice5Btn" Click="Choice5Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2">
-                <TextBox x:Name="userEntryTxt"
+        <!-- Ethernet Info Label Borders -->
+        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="7" Grid.RowSpan="3" Background="#FF95BCE5" />
+        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+        <!-- Ethernet Info Borders-->
+        <Border Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1" />
+        <Border Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+        <Border Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="5" Grid.RowSpan="1" Background="#FF578AB7" BorderBrush="Black" BorderThickness="1"/>
+
+        <Label Grid.Row="0"  Content="IP Address Configurator" FontFamily="Bahnschrift Light" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,0" Grid.ColumnSpan="7" Grid.Column="0" Background="Black" Foreground="White" />
+
+        <RadioButton Grid.Row="2" Grid.Column="1" FontSize="16" x:Name="Choice1Btn"  Content="DHCP"  FontFamily="Bahnschrift Bold" Click="Choice1Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <RadioButton Grid.Row="3" Grid.Column="1" FontSize="16" x:Name="Choice2Btn"  Content="Choice2Content" FontFamily="Bahnschrift Bold" Click="Choice2Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <RadioButton Grid.Row="4" Grid.Column="1" FontSize="16" x:Name="Choice3Btn"  Content="Choice3Content" FontFamily="Bahnschrift Bold" Click="Choice3Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <RadioButton Grid.Row="5" Grid.Column="1" FontSize="16" x:Name="Choice4Btn"  Content="Choice4Content" FontFamily="Bahnschrift Bold" Click="Choice4Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+        <RadioButton Grid.Row="6" Grid.Column="1" x:Name="Choice5Btn" Click="Choice5Btn_Click" VerticalAlignment="Center" Grid.ColumnSpan="2">
+            <TextBox x:Name="userEntryTxt"
                          Height="24"
                          TextWrapping="Wrap"
                          Text="custom entry"
@@ -72,32 +71,27 @@
                          VerticalAlignment="Bottom"
                          FontSize="16" Background="#7FFFFFFF" Foreground="Tan"/>
 
-            </RadioButton>
-            <Button Grid.Column="3" Content="Apply" HorizontalAlignment="Center" Grid.Row="6" FontFamily="Bahnschrift Light" VerticalAlignment="Center" Height="24" Width="48" Click="ApplyUserEntryBtn_Click"/>
+        </RadioButton>
+        <Button Grid.Column="3" Content="Apply" HorizontalAlignment="Center" Grid.Row="6" FontFamily="Bahnschrift Light" VerticalAlignment="Center" Height="24" Width="48" Click="ApplyUserEntryBtn_Click"/>
 
-            <Label x:Name="adapterLabel" Content="Adapter:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold"  Grid.Column="1" Grid.Row="8" FontSize="12" Foreground="#D8000000" Margin="0,0,5,0" FontWeight="Bold" />
-            <Label x:Name="hostNameLabel" Content="HostName:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold"  Grid.Column="1" Grid.Row="9" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="0,0,5,0" />
-            <Label x:Name="ipaLabel" Content="IP Address:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold" Grid.Column="1" Grid.Row="10" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="0,0,5,0" />
+        <Label x:Name="adapterLabel" Content="Adapter:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold"  Grid.Column="1" Grid.Row="8" FontSize="12" Foreground="#D8000000" Margin="0,0,5,0" FontWeight="Bold" />
+        <Label x:Name="hostNameLabel" Content="HostName:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold"  Grid.Column="1" Grid.Row="9" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="0,0,5,0" />
+        <Label x:Name="ipaLabel" Content="IP Address:" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Bahnschrift Bold" Grid.Column="1" Grid.Row="10" FontSize="12" FontWeight="Bold" Foreground="#D8000000" Margin="0,0,5,0" />
 
-            <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontSize="14" FontWeight="Bold">
-                <TextBox.ContextMenu>
-                    <ContextMenu/>
-                </TextBox.ContextMenu>
-            </TextBox>
-            <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="hostName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontSize="14" FontWeight="Bold">
-                <TextBox.ContextMenu>
-                    <ContextMenu/>
-                </TextBox.ContextMenu>
-            </TextBox>
-            <TextBox Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="ipAddress" FontSize="14" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontWeight="Bold">
-                <TextBox.ContextMenu>
-                    <ContextMenu/>
-                </TextBox.ContextMenu>
-            </TextBox>
-
-
-        </Grid>
-
+        <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" x:Name="adapterName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontSize="14" FontWeight="Bold">
+            <TextBox.ContextMenu>
+                <ContextMenu/>
+            </TextBox.ContextMenu>
+        </TextBox>
+        <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" x:Name="hostName" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontSize="14" FontWeight="Bold">
+            <TextBox.ContextMenu>
+                <ContextMenu/>
+            </TextBox.ContextMenu>
+        </TextBox>
+        <TextBox Grid.Row="10" Grid.Column="2" Grid.ColumnSpan="2" x:Name="ipAddress" FontSize="14" BorderThickness="0" Background="Transparent" IsReadOnly="True" OverridesDefaultStyle="False" Foreground="#FF262424" SelectionBrush="{x:Null}" FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,0" VerticalAlignment="Center" FontFamily="Bahnschrift Light" FontWeight="Bold">
+            <TextBox.ContextMenu>
+                <ContextMenu/>
+            </TextBox.ContextMenu>
+        </TextBox>
     </Grid>
-
 </Window>

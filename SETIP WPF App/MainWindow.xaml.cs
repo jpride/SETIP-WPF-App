@@ -145,12 +145,13 @@ namespace SETIP_WPF_App
                         {
                             //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
                             _nic = nic;
+                            var speed = nic.Speed / 1000000000 >= 1 ? "1 Gbps" : "100 Mbps";
                             _adapter = nic.Name;
                             
                             //'this' is the Main Window Class and Dispatcher handles updating the UI
                             this.Dispatcher.Invoke(() =>
                                 {
-                                    adapterName.Text = _adapter;
+                                    adapterName.Text = _adapter + "(" + speed + ")";
                                 });
 
                             if (prop.IsDhcpEnabled)
@@ -170,7 +171,7 @@ namespace SETIP_WPF_App
                                 {
                                     this.Dispatcher.Invoke(() =>
                                     {
-                                        adapterName.Text = nic.Name;
+                                        adapterName.Text = nic.Name + "(" + speed + ")";
                                         hostName.Text = Dns.GetHostName();
                                         ipAddress.Text = ip.Address.ToString() + "/" + ip.PrefixLength.ToString();
                                     });
@@ -211,7 +212,6 @@ namespace SETIP_WPF_App
                 _timer.Tick += new EventHandler(AdapterTimeOut);
                 _timer.Interval = 5000;
                 _timer.Start();
-                adapterName.FontSize = 10;
                 adapterName.Text = "Waiting for active adapter";
                 ShowMessage(_messageBoxIsShown, "No active adapters found...Waiting for active adapter");
             }
@@ -242,17 +242,7 @@ namespace SETIP_WPF_App
 
 
         //*******************   UI events   ***************************//
-        private void userEntryTxt_GotFocus(object sender, RoutedEventArgs e)
-        {
-            userEntryTxt.Text = "";
-            userEntryTxt.Foreground = System.Windows.Media.Brushes.Black;
-        }
 
-        private void Choice5Btn_Click(object sender, RoutedEventArgs e)
-        {
-            //userEntryTxt.Text = "";
-            //commented out because the user experience was not ideal. Text would clear out if user selected the button after entering  desired address
-        }
 
         private void Choice1Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -264,6 +254,7 @@ namespace SETIP_WPF_App
                 ProcessRequest(p);
 
                 adapterName.Text = "waiting for DHCP...";
+                UpdateAdapterInfo();
 
             }
         }
@@ -303,6 +294,18 @@ namespace SETIP_WPF_App
                 ProcessRequest(p);
                 UpdateAdapterInfo();
             }
+        }
+
+        private void userEntryTxt_GotFocus(object sender, RoutedEventArgs e)
+        {
+            userEntryTxt.Text = "";
+            userEntryTxt.Foreground = System.Windows.Media.Brushes.Black;
+        }
+
+        private void Choice5Btn_Click(object sender, RoutedEventArgs e)
+        {
+            //userEntryTxt.Text = "";
+            //commented out because the user experience was not ideal. Text would clear out if user selected the button after entering  desired address
         }
 
         private void ApplyUserEntryBtn_Click(object sender, RoutedEventArgs e)
