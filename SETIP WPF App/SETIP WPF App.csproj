@@ -125,5 +125,8 @@
   <ItemGroup>
     <Resource Include="Blue Border bg.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="cthulhu_icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

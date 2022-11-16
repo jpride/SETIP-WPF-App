@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System.Windows.Input;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 
 namespace SETIP_WPF_App
 {
@@ -19,6 +20,7 @@ namespace SETIP_WPF_App
         private NetworkInterface _nic;
         private string _adapter;
         private int _adapterCount = 0;
+        private NetworkInterfaceType _adapterType = NetworkInterfaceType.Ethernet;
 
         private readonly string _appTitle = "IP Address Configurator";
         public bool _messageBoxIsShown = false; //tracks state of message box, in order to stop them from stacking indefinetely
@@ -134,68 +136,150 @@ namespace SETIP_WPF_App
             //loop through list and find interface that is both "Up" and contains the word 'Ethernet' in it
             foreach (NetworkInterface nic in interfaces)
             {
+
                 IPInterfaceProperties adapterProps = nic.GetIPProperties();
                 IPv4InterfaceProperties prop = adapterProps.GetIPv4Properties();
 
-                if (nic.OperationalStatus == OperationalStatus.Up & nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                //Console.WriteLine($"Nic Type: {nic.NetworkInterfaceType}");
+                //Console.WriteLine($"{NetworkInterfaceType.Wireless80211}");
+
+                if (nic.OperationalStatus == OperationalStatus.Up)
                 {
-                    if (nic.Name.Contains("Ethernet"))
+                    if (_adapterType == NetworkInterfaceType.Wireless80211) //selected adapter 
                     {
-                        if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                        if (nic.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
                         {
-                            //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
-                            _nic = nic;
-                            var speed = nic.Speed / 1000000000 >= 1 ? "1 Gbps" : "100 Mbps";
-                            _adapter = nic.Name;
-                            
-                            //'this' is the Main Window Class and Dispatcher handles updating the UI
-                            this.Dispatcher.Invoke(() =>
-                                {
-                                    adapterName.Text = _adapter + "(" + speed + ")";
-                                });
-
-                            if (prop.IsDhcpEnabled)
+                            if (nic.Name.Contains("Wi-Fi"))
                             {
-                                this.Dispatcher.Invoke(() =>
+                                if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
                                 {
-                                    Choice1Btn.IsChecked = true;
-                                });
+                                    //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
+                                    _nic = nic;
+                                    var speed = ((nic.Speed * 10 )/ 1000000000) >= 1 ? "1 Gbps" : "100 Mbps";
+                                    _adapter = nic.Name;
 
-                            }
-
-                            _adapterCount++;
-
-                            foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
-                            {
-                                if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                                {
-                                    this.Dispatcher.Invoke(() =>
+                                    //'this' is the Main Window Class and Dispatcher handles updating the UI
+                                    Dispatcher.Invoke(() =>
                                     {
-                                        adapterName.Text = nic.Name + "(" + speed + ")";
-                                        hostName.Text = Dns.GetHostName();
-                                        ipAddress.Text = ip.Address.ToString() + "/" + ip.PrefixLength.ToString();
+                                        adapterName.Text = _adapter + " (" + speed + ")";
+                                        this.WifiSelectBtn.IsChecked = true;
+                                        this.EthernetSelectBtn.IsChecked = false;
                                     });
 
-                                    if (ip.Address.ToString() == _choice2Address)
+                                    if (prop.IsDhcpEnabled)
                                     {
-                                        this.Dispatcher.Invoke(() =>
+                                        Dispatcher.Invoke(() =>
                                         {
-                                            Choice2Btn.IsChecked = true;
+                                            Choice1Btn.IsChecked = true;
                                         });
+
                                     }
-                                    else if (ip.Address.ToString() == _choice3Address)
+
+                                    _adapterCount++;
+
+                                    foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
                                     {
-                                        this.Dispatcher.Invoke(() =>
+                                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                                         {
-                                            Choice3Btn.IsChecked = true;
-                                        });
+                                            Dispatcher.Invoke(() =>
+                                            {
+                                                adapterName.Text = nic.Name + " (" + speed + ")";
+                                                hostName.Text = Dns.GetHostName();
+                                                ipAddress.Text = ip.Address.ToString() + "/" + ip.PrefixLength.ToString();
+                                            });
+
+                                            if (ip.Address.ToString() == _choice2Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice2Btn.IsChecked = true;
+                                                });
+                                            }
+                                            else if (ip.Address.ToString() == _choice3Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice3Btn.IsChecked = true;
+                                                });
+                                            }
+                                            else if (ip.Address.ToString() == _choice4Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice4Btn.IsChecked = true;
+                                                });
+                                            }
+                                        }
                                     }
-                                    else if (ip.Address.ToString() == _choice4Address)
+                                }
+                            }
+                        }
+                    }
+                    else if (_adapterType == NetworkInterfaceType.Ethernet) //selected adapter 
+                    {
+                        if (nic.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
+                        {
+                            if (nic.Name.Contains("Ethernet"))
+                            {
+                                if (!nic.Name.Contains("vEthernet") & !nic.Name.Contains("Loopback") & !nic.Name.Contains("Bluetooth"))
+                                {
+                                    //once a valid adapter is found, places the name in the adapterName box and sets the adapter variable used in the processes to the name
+                                    _nic = nic;
+                                    var speed = ((nic.Speed * 10) / 1000000000) >= 1 ? "1 Gbps" : "100 Mbps";
+                                    _adapter = nic.Name;
+
+                                    //'this' is the Main Window Class and Dispatcher handles updating the UI
+                                    Dispatcher.Invoke(() =>
                                     {
-                                        this.Dispatcher.Invoke(() =>
+                                        adapterName.Text = _adapter +  " (" + speed + ")";
+                                        EthernetSelectBtn.IsChecked = true;
+                                        WifiSelectBtn.IsChecked = false;
+                                    });
+
+                                    if (prop.IsDhcpEnabled)
+                                    {
+                                        Dispatcher.Invoke(() =>
                                         {
-                                            Choice4Btn.IsChecked = true;
+                                            Choice1Btn.IsChecked = true;
                                         });
+
+                                    }
+
+                                    _adapterCount++;
+
+                                    foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
+                                    {
+                                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                                        {
+                                            Dispatcher.Invoke(() =>
+                                            {
+                                                adapterName.Text = nic.Name + " (" + speed + ")";
+                                                hostName.Text = Dns.GetHostName();
+                                                ipAddress.Text = ip.Address.ToString() + "/" + ip.PrefixLength.ToString();
+                                            });
+
+                                            if (ip.Address.ToString() == _choice2Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice2Btn.IsChecked = true;
+                                                });
+                                            }
+                                            else if (ip.Address.ToString() == _choice3Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice3Btn.IsChecked = true;
+                                                });
+                                            }
+                                            else if (ip.Address.ToString() == _choice4Address)
+                                            {
+                                                Dispatcher.Invoke(() =>
+                                                {
+                                                    Choice4Btn.IsChecked = true;
+                                                });
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -215,8 +299,6 @@ namespace SETIP_WPF_App
                 adapterName.Text = "Waiting for active adapter";
                 ShowMessage(_messageBoxIsShown, "No active adapters found...Waiting for active adapter");
             }
-
-            
         }
 
         public Process CreateProcess(string adapter, string ipMaskString)
@@ -534,6 +616,46 @@ namespace SETIP_WPF_App
             userEntryTxt.Foreground = System.Windows.Media.Brushes.Tan;
         }
 
-       
+        private void WifiSelectBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ResetUserEntryText();
+            _adapterType = NetworkInterfaceType.Wireless80211;
+
+            Console.WriteLine($"WifiSelectBtn status: {WifiSelectBtn.IsChecked}");
+
+            Dispatcher.Invoke(() =>
+            {
+                this.WifiSelectBtn.IsChecked = true;
+                this.EthernetSelectBtn.IsChecked = false;
+            });
+
+            
+            if ((bool)WifiSelectBtn.IsChecked)
+            {
+                UpdateAdapterInfo();
+            }
+            
+        }
+
+        private void EthernetSelectBtn_Click(object sender, RoutedEventArgs e)
+        {  
+            ResetUserEntryText();
+            _adapterType = NetworkInterfaceType.Ethernet;
+
+            Console.WriteLine($"EthernetSelectBtn status: {EthernetSelectBtn.IsChecked}");
+
+            Dispatcher.Invoke(() =>
+            {
+                this.WifiSelectBtn.IsChecked = false;
+                this.EthernetSelectBtn.IsChecked = true;
+            });
+
+            
+            if ((bool)EthernetSelectBtn.IsChecked)
+            {
+                UpdateAdapterInfo();
+            }
+            
+        }
     }
 }
