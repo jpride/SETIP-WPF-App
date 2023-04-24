@@ -41,7 +41,7 @@
     <StartupObject>SETIP_WPF_App.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>hnet.com-image.ico</ApplicationIcon>
+    <ApplicationIcon>favicon_cthulhu.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
@@ -127,6 +127,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="cthulhu_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="cthulhu_icon_text.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Wetwork.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="favicon_cthulhu.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
