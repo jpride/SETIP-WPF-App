@@ -511,6 +511,23 @@ namespace SETIP_WPF_App
             }
         }
 
+        private void OpenNetworkPanelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            string exePath = "C:\\windows\\system32\\control.exe";
+            ProcessStartInfo processStartInfo = new ProcessStartInfo
+            {
+                FileName = exePath,
+                Arguments = "/name Microsoft.NetworkAndSharingCenter",
+                Verb = "runas",
+                UseShellExecute = true,
+                CreateNoWindow = true,
+            };
+
+            Process process = new Process();
+            process.StartInfo = processStartInfo;
+            process.Start();
+        }
+
         private void OnKeyDownInUserEntryBoxHandler(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
